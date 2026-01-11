@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/users"); 
-const { io } = require("../server");
+const { getIO } = require("../socket");
 
 router.post("/register", async (req, res) => {
   try {
@@ -261,7 +261,9 @@ router.post("/add-friend", async (req, res) => {
 
     await me.save();
     await friend.save();
+    const io = getIO();
     io.to(friend.mobile).emit("friend-added");
+
 
     res.json({
       success: true,
@@ -306,5 +308,6 @@ router.get("/friends", async (req, res) => {
 });
 
 module.exports = router;
+
 
 
