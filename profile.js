@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-
+  const API_BASE = "https://chattingplatform.onrender.com";
   const nameEl = document.getElementById("name");
   const mobileEl = document.getElementById("mobile");
   const friendsBox = document.getElementById("friendsList");
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadProfile() {
     try {
       const res = await fetch(
-        `http://localhost:3000/auth/profile?mobile=${mobile}`
+        `${API_BASE}/auth/profile?mobile=${mobile}`
       );
 
       const data = await res.json();
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!friendMobile) return;
 
     try {
-      const res = await fetch("http://localhost:3000/auth/add-friend", {
+      const res = await fetch(`${API_BASE}/auth/add-friend`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadFriends() {
     try {
       const res = await fetch(
-        `http://localhost:3000/auth/friends?mobile=${mobile}`
+        `${API_BASE}/auth/friends?mobile=${mobile}`
       );
 
       const data = await res.json();
@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
 
