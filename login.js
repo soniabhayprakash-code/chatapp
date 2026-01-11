@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = "https://chattingplatform.onrender.com";
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
 
@@ -22,11 +23,11 @@ async function login() {
   }
 
   try {
-    const res = await fetch("http://localhost:3000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+    const res = await fetch(`${API_BASE}/auth/login`, {
+          method: "POST",
+          headers: {
+      "Content-Type": "application/json"
+    },
       body: JSON.stringify({ mobile, password })
     });
 
@@ -34,11 +35,11 @@ async function login() {
 
     if (data.success && data.otpRequired) {
       localStorage.setItem("mobile", mobile);
-      await fetch("http://localhost:3000/auth/send-otp", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json"
-            },
+      await fetch(`${API_BASE}/auth/send-otp`, {
+          method: "POST",
+          headers: {
+      "Content-Type": "application/json"
+    },
             body: JSON.stringify({ mobile })
        });
       window.location.href = "otp.html";
@@ -57,3 +58,4 @@ async function login() {
   }
 }
 });
+
