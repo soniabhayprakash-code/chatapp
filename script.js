@@ -1,3 +1,4 @@
+const API_BASE = "https://chattingplatform.onrender.com";
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
 
@@ -21,13 +22,13 @@ async function register() {
     return;
   }
   try {
-    const res = await fetch("http://localhost:3000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, mobile, password })
-    });
+  const res = await fetch(`${API_BASE}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, mobile, password })
+  });
 
     const data = await res.json();
 
@@ -43,6 +44,7 @@ async function register() {
     console.error(err);
   }
 }
+
 
 
 
