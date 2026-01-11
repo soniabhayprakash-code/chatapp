@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_BASE = "https://chattingplatform.onrender.com";
-async function otp() {
-  const otp = document.getElementById("otp").value.trim();
-  const mobile = localStorage.getItem("mobile");
+  async function otp() {
+        const otp = document.getElementById("otp").value.trim();
+        const mobile = localStorage.getItem("mobile");
 
   if (!otp) {
     alert("Please enter OTP");
@@ -40,5 +40,6 @@ async function otp() {
   }
 }
 });
+
 
 
