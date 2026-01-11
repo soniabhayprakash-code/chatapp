@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="style3.css?v=live">
+    <link rel="shortcut icon" href="icon-192.png" type="image/x-icon">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="box">
+        <div id="chat">The Chatting</div>
+        <div id="profilebox">
+        <h3>Your profile-</h3>
+
+        <p>Name: <span id="name">Loading........</span></p>
+        <p>Mobile: <span id="mobile">........</span></p>
+        <p>Passward: ........</p>
+        </div>
+
+    <div id="friendsContainer">
+             <div id="friendsList"></div>
+    </div>
+
+    <button type="button" class="addbtn" onclick="addFriend()">⊕</button>
+
+  </div>
+        <div id="circle"></div>
+    </div>
+    <script src="https://chattingplatform.onrender.com/socket.io/socket.io.js"></script>
+    <script src="profile.js?v=live"></script>
+</body>
+</html>
