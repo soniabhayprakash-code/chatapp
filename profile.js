@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   );
 
-  window.location.href = "index.html";
+  window.location.href = "chat.html";
 };
 
         friendsBox.appendChild(div);
@@ -127,5 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
