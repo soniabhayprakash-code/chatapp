@@ -22,7 +22,7 @@ async function register() {
     return;
   }
   try {
-  const res = await fetch(`${API_BASE}/auth/register`, {
+  const res = await fetch(`${API_BASE}/auth/index`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -44,6 +44,7 @@ async function register() {
     console.error(err);
   }
 }
+
 
 
 
