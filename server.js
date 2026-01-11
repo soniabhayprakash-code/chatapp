@@ -24,7 +24,7 @@ const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/chat.html');
 });
 
 io.on("connection", (socket) => {
@@ -61,6 +61,7 @@ http.listen(3000, () => {
   console.log('Go to Browser: http://localhost:3000');
   console.log('=====================================');
 });
+
 
 
 
