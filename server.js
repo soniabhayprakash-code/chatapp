@@ -55,12 +55,13 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(PORT, () => {
+http.listen(3000, () => {
   console.log('=====================================');
   console.log('--Started--');
-  console.log('Go to Browser: http://localhost:PORT');
+  console.log('Go to Browser: http://localhost:3000');
   console.log('=====================================');
 });
+
 
 
 
