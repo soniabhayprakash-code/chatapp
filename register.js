@@ -20,13 +20,12 @@ async function register() {
     alert("Please fill all fields.");
     return;
   }
-
   const API_BASE = "https://chattingplatform.onrender.com";
-
-   fetch(`${API_BASE}/auth/register`, {
-          method: "POST",
-          headers: {
-         "Content-Type": "application/json"
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ name, mobile, password })
     });
@@ -45,6 +44,7 @@ async function register() {
     console.error(err);
   }
 }
+
 
 
 
