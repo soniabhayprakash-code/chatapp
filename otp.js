@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", () => {
 async function otp() {
   const otp = document.getElementById("otp").value.trim();
   const mobile = localStorage.getItem("mobile");
@@ -37,3 +38,5 @@ async function otp() {
     console.error(err);
   }
 }
+});
+
