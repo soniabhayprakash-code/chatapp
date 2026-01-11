@@ -21,11 +21,12 @@ async function register() {
     return;
   }
 
-  try {
-    const res = await fetch("http://localhost:3000/auth/index", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+  const API_BASE = "https://chattingplatform.onrender.com";
+
+   fetch(`${API_BASE}/auth/register`, {
+          method: "POST",
+          headers: {
+         "Content-Type": "application/json"
       },
       body: JSON.stringify({ name, mobile, password })
     });
@@ -44,5 +45,6 @@ async function register() {
     console.error(err);
   }
 }
+
 
 
