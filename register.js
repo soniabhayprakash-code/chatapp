@@ -22,7 +22,7 @@ async function register() {
   }
 
   try {
-    const res = await fetch("http://localhost:3000/auth/register", {
+    const res = await fetch("http://localhost:3000/auth/index", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -44,4 +44,5 @@ async function register() {
     console.error(err);
   }
 }
+
 
