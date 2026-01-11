@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = "https://chattingplatform.onrender.com";
 async function otp() {
   const otp = document.getElementById("otp").value.trim();
   const mobile = localStorage.getItem("mobile");
@@ -15,11 +16,11 @@ async function otp() {
   }
 
   try {
-    const res = await fetch("http://localhost:3000/auth/verify-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+    const res = await fetch(`${API_BASE}/auth/verify-otp`, {
+          method: "POST",
+          headers: {
+      "Content-Type": "application/json"
+    },
       body: JSON.stringify({ mobile, otp })
     });
 
@@ -39,4 +40,5 @@ async function otp() {
   }
 }
 });
+
 
