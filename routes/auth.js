@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/users"); 
 const { io } = require("../server");
+module.exports = router;
 
 router.post("/register", async (req, res) => {
   try {
@@ -306,3 +307,4 @@ router.get("/friends", async (req, res) => {
 });
 
 module.exports = router;
+
