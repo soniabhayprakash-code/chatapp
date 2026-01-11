@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", () => {
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
 
@@ -55,3 +56,4 @@ async function login() {
     console.error(err);
   }
 }
+});
