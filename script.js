@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", () => {
 const API_BASE = "https://chattingplatform.onrender.com";
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
@@ -50,6 +51,7 @@ if ("serviceWorker" in navigator) {
     .then(() => console.log("Service Worker registered"))
     .catch(err => console.log("SW error", err));
 }
+});
 
 
 
