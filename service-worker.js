@@ -1,13 +1,14 @@
 const CACHE_NAME = "the-chatting-live"; 
 
 const ASSETS = [
-  "/chattingplatform/",
-  "/chattingplatform/index.html",
-  "/chattingplatform/style.css",
-  "/chattingplatform/script.js",
-  "/chattingplatform/manifest.json",
-  "/chattingplatform/icon-192.png",
-  "/chattingplatform/icon-512.png"
+  "/chatapp/",
+  "/chatapp/index.html",
+  "/chatapp/profile.html",
+  "/chatapp/style1.css",
+  "/chatapp/style2.css",
+  "/chatapp/style3.css",
+  "/chatapp/icon-192.png",
+  "/chatapp/icon-512.png"
 ];
 
 self.addEventListener("install", () => {
@@ -35,4 +36,5 @@ self.addEventListener("fetch", (event) => {
       })
       .catch(() => caches.match(event.request))
   );
+
 });
