@@ -55,11 +55,19 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
     });
   });
-http.listen(3000, () => {
-    console.log('=====================================');
+
+const PORT = process.env.PORT || 3000;
+http.listen(PORT, () => {
     console.log('--Started--');
-    console.log('Go to Browser: http://localhost:3000');
-    console.log('=====================================');
+    console.log("Server running on port", PORT);
 });
+
+// http.listen(3000, () => {
+//     console.log('=====================================');
+//     console.log('--Started--');
+//     console.log('Go to Browser: http://localhost:3000');
+//     console.log('=====================================');
+// });
+
 
 
