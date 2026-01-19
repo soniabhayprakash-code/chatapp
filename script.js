@@ -65,10 +65,20 @@ document.addEventListener("DOMContentLoaded", () => {
   registerBtn.addEventListener("click", register);
 
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("Service Worker registered"))
+        window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/chatapp/service-worker.js")
+        .then((registration) => {
+               console.log("Service Worker Registered");
+
+               registration.update();
+      })
       .catch(err => console.log("SW error", err));
-  }
+     });
+     }
+     navigator.serviceWorker.getRegistrations().then(regs => {
+          console.log("SW registrations:", regs);
+     });
 
 });
+
 
