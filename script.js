@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  const BASE_URL = "https://chatapp-6rfl.onrender.com";
+
   const passwordInput = document.getElementById("password");
   const togglePassword = document.getElementById("togglePassword");
   const registerBtn = document.getElementById("registerbtn");
@@ -35,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     registerBtn.disabled = true;
 
     try {
-      const res = await fetch("http://localhost:3000/auth/register", {
+      const res = await fetch("${BASE_URL}/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, mobile, password })
@@ -69,3 +71,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
