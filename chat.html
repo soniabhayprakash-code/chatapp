@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Chatting</title>
+    <link rel="stylesheet" href="style.css?v=live">
+    <link rel="shortcut icon" href="icon-192.png" type="image/x-icon">
+<link rel="manifest" href="/chattingplatform/manifest.json">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="The Chatting">
+<link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="box">
+    <span id="friendName"></span>
+    <div id="chat-box">
+        <ul id="messages"></ul>
+    </div>
+    <div id="typing">
+        <textarea id="messageInput"
+           placeholder="Type Message..." 
+           rows="1"></textarea>
+    <button type="button" id="sendBtn">⩥</button>
+</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="chat.js?v=live"></script>
+</body>
+</html>
