@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const BASE_URL = "https://chatapp-6rfl.onrender.com";
+  const BASE_URL = "https://chatapp-1-suv6.onrender.com";
 
   const passwordInput = document.getElementById("password");
   const togglePassword = document.getElementById("togglePassword");
@@ -80,5 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
