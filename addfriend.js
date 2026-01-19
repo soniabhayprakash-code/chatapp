@@ -1,4 +1,5 @@
 async function addFriend() {
+  const BASE_URL = "https://chatapp-6rfl.onrender.com";
   const friendMobileInput = document.getElementById("addfriend");
   const friendMobile = friendMobileInput.value.trim();
 
@@ -27,7 +28,7 @@ async function addFriend() {
   }
 
   try {
-    const res = await fetch("http://localhost:3000/auth/add-friend", {
+    const res = await fetch("${BASE_URL}/auth/add-friend", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -55,3 +56,4 @@ async function addFriend() {
     alert("--Server error--");
   }
 }
+
