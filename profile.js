@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const BASE_URL = "https://chatapp-6rfl.onrender.com";
+  const BASE_URL = "https://chatapp-1-suv6.onrender.com";
 
   const nameEl = document.getElementById("name");
   const mobileEl = document.getElementById("mobile");
@@ -142,4 +142,5 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
