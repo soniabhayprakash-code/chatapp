@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  const BASE_URL = "https://chatapp-6rfl.onrender.com";
+
   const nameEl = document.getElementById("name");
   const mobileEl = document.getElementById("mobile");
   const friendsBox = document.getElementById("friendsList");
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const socket = io("http://localhost:3000");
+  const socket = io(BASE_URL);
 
   socket.on("connect", () => {
     console.log("Socket connected");
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadProfile() {
     try {
       const res = await fetch(
-        `http://localhost:3000/auth/profile?mobile=${mobile}`
+        `${BASE_URL}/auth/profile?mobile=${mobile}`
       );
 
       const data = await res.json();
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadFriends() {
     try {
       const res = await fetch(
-        `http://localhost:3000/auth/friends?mobile=${mobile}`
+        `${BASE_URL}/auth/friends?mobile=${mobile}`
       );
 
       const data = await res.json();
@@ -107,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!confirmDelete) return;
 
       try {
-        const res = await fetch("http://localhost:3000/auth/delete-user", {
+        const res = await fetch("${BASE_URL}/auth/delete-user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -140,3 +142,4 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
