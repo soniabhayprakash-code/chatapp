@@ -3,10 +3,9 @@ const CACHE_NAME = "the-chatting-live";
 const ASSETS = [
   "/chatapp/",
   "/chatapp/index.html",
-  "/chatapp/profile.html",
-  "/chatapp/style1.css",
-  "/chatapp/style2.css",
-  "/chatapp/style3.css",
+  "/chatapp/script.js",
+  "/chatapp/style.css",
+  "/chatapp/manifest.json",
   "/chatapp/icon-192.png",
   "/chatapp/icon-512.png"
 ];
@@ -38,3 +37,4 @@ self.addEventListener("fetch", (event) => {
   );
 
 });
+
