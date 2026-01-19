@@ -12,12 +12,13 @@ const io = require('socket.io')(http, {
 
 app.set("io", io);
 const onlineUsers = new Map();
+app.use(express.json());
 app.use(express.static(__dirname));
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected."))
 .catch(err => console.log(err));
 
-app.use(express.json());
+// app.use(express.json());
 const authRoutes = require("./routes/auth");
 
 app.use("/auth", authRoutes);
@@ -68,6 +69,7 @@ http.listen(PORT, () => {
 //     console.log('Go to Browser: http://localhost:3000');
 //     console.log('=====================================');
 // });
+
 
 
 
