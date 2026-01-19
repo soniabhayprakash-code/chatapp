@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  const BASE_URL = "https://chatapp-6rfl.onrender.com";
+
   const sendBtn = document.getElementById("sendBtn");
   const input = document.getElementById("messageInput");
   const messagesList = document.getElementById("messages");
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     friendName.textContent = friendNameValue;
 }
 
-  const socket = io("http://localhost:3000", {
+  const socket = io(BASE_URL, {
     transports: ["websocket"]
   });
 
@@ -147,3 +149,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
