@@ -1,5 +1,5 @@
 async function addFriend() {
-  const BASE_URL = "https://chatapp-6rfl.onrender.com";
+  const BASE_URL = "https://chatapp-1-suv6.onrender.com";
   const friendMobileInput = document.getElementById("addfriend");
   const friendMobile = friendMobileInput.value.trim();
 
@@ -56,4 +56,5 @@ async function addFriend() {
     alert("--Server error--");
   }
 }
+
 
