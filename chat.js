@@ -1,3 +1,12 @@
+function showAlert(message) {
+  document.getElementById("alertMessage").textContent = message;
+  document.getElementById("customAlert").classList.remove("hidden");
+}
+
+function closeAlert() {
+  document.getElementById("customAlert").classList.add("hidden");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
@@ -12,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const friendMobile = localStorage.getItem("chatFriendMobile");
 
   if (!myMobile || !friendMobile) {
-    alert("Chat user not found.");
+    showAlert("Chat user not found.");
     window.location.href = "profile.html";
     return;
   }
@@ -149,5 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
 
 
