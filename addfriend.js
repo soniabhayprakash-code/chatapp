@@ -1,3 +1,12 @@
+function showAlert(message) {
+  document.getElementById("alertMessage").textContent = message;
+  document.getElementById("customAlert").classList.remove("hidden");
+}
+
+function closeAlert() {
+  document.getElementById("customAlert").classList.add("hidden");
+}
+
 async function addFriend() {
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
   const friendMobileInput = document.getElementById("addfriend");
@@ -7,23 +16,23 @@ async function addFriend() {
 
 
   if (!myMobile) {
-    alert("User not logged in");
+    showAlert("User not logged in");
     window.location.href = "index.html";
     return;
   }
 
   if (!friendMobile) {
-    alert("Please enter mobile number.");
+    showAlert("Please enter mobile number.");
     return;
   }
 
   if (!/^\d{10}$/.test(friendMobile)) {
-    alert("Enter valid 10 digit mobile number.");
+    showAlert("Enter valid 10 digit mobile number.");
     return;
   }
 
   if (friendMobile === myMobile) {
-    alert("You cannot add yourself.");
+    showAlert("You cannot add yourself.");
     return;
   }
 
@@ -43,18 +52,19 @@ async function addFriend() {
     console.log("ADD FRIEND RESPONSE:", data);
 
     if (!data.success) {
-      alert(data.message);
+      showAlert(data.message);
       return;
     }
 
-    alert("Friend added successfully.");
+    showAlert("Friend added successfully.");
 
     window.location.href = "profile.html";
 
   } catch (err) {
     console.error("Add friend error:", err);
-    alert("--Server error--");
+    showAlert("--Server error--");
   }
 }
+
 
 
