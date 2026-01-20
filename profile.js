@@ -1,3 +1,11 @@
+function showAlert(message) {
+  document.getElementById("alertMessage").textContent = message;
+  document.getElementById("customAlert").classList.remove("hidden");
+}
+
+function closeAlert() {
+  document.getElementById("customAlert").classList.add("hidden");
+}
 document.addEventListener("DOMContentLoaded", () => {
 
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
@@ -10,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobile = localStorage.getItem("myMobile");
 
   if (!mobile) {
-    alert("User not logged in");
+    showAlert("User not logged in");
     window.location.href = "index.html";
     return;
   }
@@ -41,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("PROFILE DATA:", data);
 
       if (!data.success) {
-        alert(data.message);
+        showAlert(data.message);
         return;
       }
 
@@ -102,11 +110,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (finishBtn) {
     finishBtn.addEventListener("click", async () => {
 
-      const confirmDelete = confirm(
-        "Are you sure? Your account will be permanently deleted."
-      );
+      // const confirmDelete = confirm(
+      //   "Are you sure? Your account will be permanently deleted."
+      // );
 
-      if (!confirmDelete) return;
+      // if (!confirmDelete) return;
 
       try {
         const res = await fetch("${BASE_URL}/auth/delete-user", {
@@ -122,19 +130,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (!data.success) {
-          alert(data.message);
+          showAlert(data.message);
           return;
         }
 
         localStorage.clear();
 
-        alert("Account deleted successfully.");
+        showAlert("Account deleted successfully.");
 
         window.location.href = "index.html";
 
       } catch (err) {
         console.error(err);
-        alert("--Server error--");
+        showAlert("--Server error--");
       }
     });
   }
@@ -142,5 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
