@@ -1,3 +1,11 @@
+function showAlert(message) {
+    document.getElementById("alertMessage").textContent = message;
+    document.getElementById("customAlert").classList.remove("hidden");
+}
+
+function closeAlert() {
+    document.getElementById("customAlert").classList.add("hidden");
+}
 document.addEventListener("DOMContentLoaded", () => {
 
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
@@ -25,12 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // const password = passwordInput.value.trim();
 
     if (!name || !mobile || !password) {
-      alert("Please fill all fields.");
+      showAlert("Please fill all fields.");
       return;
     }
 
     if (!/^\d{10}$/.test(mobile)) {
-      alert("Enter valid 10 digit mobile number.");
+      showAlert("Enter valid 10 digit mobile number.");
       return;
     }
 
@@ -48,16 +56,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.success) {
         localStorage.clear();          
         localStorage.setItem("myMobile", mobile);
-        alert(data.message);
+        showAlert(data.message);
         window.location.href = "profile.html";
       } else {
-        alert(data.message);
+        showAlert(data.message);
         registerBtn.disabled = false;
       }
 
     } catch (err) {
       console.error(err);
-      alert("--Server error--");
+      showAlert("--Server error--");
       registerBtn.disabled = false;
     }
   }
@@ -80,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
 
