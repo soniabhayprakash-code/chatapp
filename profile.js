@@ -149,22 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadProfile();
   loadFriends();
-
-  if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/chatapp/service-worker.js")
-        .then((registration) => {
-               console.log("Service Worker Registered");
-
-               registration.update();
-      })
-      .catch(err => console.log("SW error", err));
-     });
-     }
-     navigator.serviceWorker.getRegistrations().then(regs => {
-          console.log("SW registrations:", regs);
-     });
 });
+
 
 
 
