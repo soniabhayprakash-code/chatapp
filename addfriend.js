@@ -37,7 +37,7 @@ async function addFriend() {
   }
 
   try {
-    const res = await fetch("${BASE_URL}/auth/add-friend", {
+    const res = await fetch(`${BASE_URL}/auth/add-friend`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -65,6 +65,7 @@ async function addFriend() {
     showAlert("--Server error--");
   }
 }
+
 
 
 
