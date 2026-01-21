@@ -178,7 +178,7 @@ html,body{
 .alert-box {
   background: #2a2a2a;
   color: #fff;
-  width: 80%;
+  width: 82%;
   max-width: 300px;
   padding: 20px;
   border-radius: 12px;
@@ -204,4 +204,5 @@ html,body{
 .hidden {
   display: none;
 }
+
 
