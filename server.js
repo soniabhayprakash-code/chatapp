@@ -1,7 +1,3 @@
-app.use((req, res, next) => {
-  console.log("INCOMING:", req.method, req.url);
-  next();
-});
 const express = require('express');
 require("dotenv").config();
 const app = express();
@@ -13,7 +9,10 @@ const io = require('socket.io')(http, {
         methods: ["GET", "POST"]
     }
 });
-
+app.use((req, res, next) => {
+  console.log("INCOMING:", req.method, req.url);
+  next();
+});
 app.set("io", io);
 const onlineUsers = new Map();
 app.use(express.json());
@@ -73,6 +72,7 @@ http.listen(PORT, () => {
 //     console.log('Go to Browser: http://localhost:3000');
 //     console.log('=====================================');
 // });
+
 
 
 
