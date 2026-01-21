@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // if (!confirmDelete) return;
 
       try {
-        const res = await fetch("${BASE_URL}/auth/delete-user", {
+        const res = await fetch(`${BASE_URL}/auth/delete-user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -150,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
 
