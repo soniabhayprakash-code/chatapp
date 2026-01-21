@@ -1,3 +1,7 @@
+app.use((req, res, next) => {
+  console.log("INCOMING:", req.method, req.url);
+  next();
+});
 const express = require('express');
 require("dotenv").config();
 const app = express();
@@ -69,6 +73,7 @@ http.listen(PORT, () => {
 //     console.log('Go to Browser: http://localhost:3000');
 //     console.log('=====================================');
 // });
+
 
 
 
