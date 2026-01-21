@@ -5,16 +5,6 @@ const ASSETS = [
   "/chatapp/index.html",
   "/chatapp/style1.css",
   "/chatapp/script.js",
-  "/chatapp/profile.html",
-  "/chatapp/style3.css",
-  "/chatapp/profile.js",
-  "/chatapp/addfriend.html",
-  "/chatapp/style2.css",
-  "/chatapp/addfriend.js",
-  "/chatapp/chat.html",
-  "/chatapp/style.css",
-  "/chatapp/chat.js",
-  "/chatapp/background.png",
   "/chatapp/manifest.json",
   "/chatapp/icon-192.png",
   "/chatapp/icon-512.png"
@@ -47,6 +37,7 @@ self.addEventListener("fetch", (event) => {
   );
 
 });
+
 
 
 
