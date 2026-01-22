@@ -80,7 +80,7 @@ html,body{
   cursor: pointer;
 }
 #friendsContainer {
-  max-height: 300px;        
+  max-height: 400px;        
   overflow-y: auto;        
   padding-bottom: 20px;
   scroll-behavior: smooth;
@@ -189,6 +189,7 @@ html,body{
 .hidden {
   display: none;
 }
+
 
 
 
