@@ -1,6 +1,6 @@
 {
   "name": "The Chatting",
-  "short_name": "Chatapp",
+  "short_name": "The Chatting",
   "description": "Real-time chatting platform",
   "start_url": "/",
   "scope": "/",
@@ -22,6 +22,7 @@
   ]
 
 }
+
 
 
 
