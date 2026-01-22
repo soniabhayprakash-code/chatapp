@@ -8,13 +8,11 @@ function closeAlert() {
 }
 document.addEventListener("DOMContentLoaded", () => {
 
-    const myMobile = localStorage.getItem("myMobile");
+   const myMobile = localStorage.getItem("myMobile");
 
    if (myMobile) {
       window.location.href = "profile.html";
    }
-
-  });
 
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
 
@@ -96,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
 
