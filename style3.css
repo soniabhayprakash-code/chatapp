@@ -56,7 +56,7 @@ html,body{
 }
 #profilebox{
     font-size: 12px;
-    height: 18%;
+    height: 16%;
     width: 90%;
     background: black;
     color: white;
@@ -188,5 +188,6 @@ html,body{
 .hidden {
   display: none;
 }
+
 
 
