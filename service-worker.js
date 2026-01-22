@@ -1,13 +1,13 @@
 const CACHE_NAME = "the-chatting-live"; 
 
 const ASSETS = [
-  "/chatapp/",
-  "/chatapp/index.html",
-  "/chatapp/style1.css",
-  "/chatapp/script.js",
-  "/chatapp/manifest.json",
-  "/chatapp/icon-192.png",
-  "/chatapp/icon-512.png"
+  "/",
+  "/index.html",
+  "/style1.css",
+  "/script.js",
+  "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png"
 ];
 
 self.addEventListener("install", () => {
@@ -37,6 +37,7 @@ self.addEventListener("fetch", (event) => {
   );
 
 });
+
 
 
 
