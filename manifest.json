@@ -1,9 +1,9 @@
 {
   "name": "The Chatting",
-  "short_name": "The Chatting",
+  "short_name": "Chatapp",
   "description": "Real-time chatting platform",
-  "start_url": "/chatapp/index.html",
-  "scope": "/chatapp/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
@@ -22,6 +22,7 @@
   ]
 
 }
+
 
 
 
