@@ -6,6 +6,12 @@ function showAlert(message) {
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
+
+const myMobile = localStorage.getItem("myMobile");
+if (myMobile) {
+    window.location.href = "profile.html";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
@@ -88,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
 
