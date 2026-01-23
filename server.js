@@ -42,6 +42,14 @@ io.on("connection", (socket) => {
     socket.emit("roomJoined", { roomId });
   });
 
+  socket.on("typing", ({ roomId, mobile }) => {
+    socket.to(roomId).emit("showTyping", { mobile });
+  });
+
+  socket.on("stopTyping", ({ roomId }) => {
+    socket.to(roomId).emit("hideTyping");
+  });
+
   socket.on("sendMessage", (data) => {
     io.to(data.roomId).emit("receiveMessage", data);
   });
@@ -69,6 +77,7 @@ http.listen(PORT, () => {
 //     console.log('Go to Browser: http://localhost:3000');
 //     console.log('=====================================');
 // });
+
 
 
 
