@@ -36,7 +36,7 @@ html,body{
     -ms-touch-action: pan-x pan-y;
     user-zoom: none; 
 }
-#friendName{
+#chatHeader{
     flex-shrink: 0;
     height: 10%;
     width: 100%;
@@ -44,7 +44,6 @@ html,body{
     border-radius: none;
     border-bottom-right-radius: 35px;
     border-bottom-left-radius: 35px;
-    font-size: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,6 +54,17 @@ html,body{
     z-index: 100;
     font-family: "Dancing Script", cursive;
     font-optical-sizing: auto;
+}
+#friendName{
+    font-size: 35px;
+    font-family: "Dancing Script", cursive;
+    font-optical-sizing: auto;
+    margin-right: 8px;
+}
+#typingIndicator{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 10px;
+    margin-top: 18px;
 }
 #chat-box {
     flex: 1; 
@@ -211,6 +221,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
