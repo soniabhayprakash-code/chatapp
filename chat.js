@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const messagesList = document.getElementById("messages");
   const chatBox = document.getElementById("chat-box");
   const typing = document.getElementById("typing");
+  const typingIndicator = document.getElementById("typingIndicator");
+
+  let typingTimeout;
+  let isTyping = false;
 
   const myMobile = localStorage.getItem("myMobile");
   const friendMobile = localStorage.getItem("chatFriendMobile");
@@ -151,13 +155,41 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         input.style.overflowY = "hidden";
     }
+    if (!input.value.trim()) return;
+
+    if (!isTyping) {
+      socket.emit("typing", {
+      roomId,
+      mobile: myMobile
+    });
+      isTyping = true;
+    }
+
+    clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(() => {
+        socket.emit("stopTyping", { roomId });
+        isTyping = false;
+      }, 1200);
     });
 
+  socket.on("showTyping", () => {
+      typingIndicator.textContent = `is typing...`;
+      typingIndicator.classList.remove("hidden");
+    });
+
+
+  socket.on("hideTyping", () => {
+      typingIndicator.classList.add("hidden");
+    });
+
+  typingIndicator.classList.add("hidden");
   window.addEventListener("beforeunload", () => {
     socket.disconnect();
   });
 
 });
+
 
 
 
