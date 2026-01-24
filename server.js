@@ -3,6 +3,7 @@ require("dotenv").config();
 const app = express();
 const http = require('http').createServer(app);
 const Message = require("./models/Message");
+const PushSubscription = require("./models/pushSubscription");
 const mongoose = require("mongoose");
 const io = require('socket.io')(http, {
     cors: {
@@ -11,17 +12,36 @@ const io = require('socket.io')(http, {
     }
 });
 
+const webPush = require("web-push");
+webPush.setVapidDetails(
+  "mailto:test@chatapp.com",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
+app.use(express.json());
+app.post("/subscribe", async (req, res) => {
+
+  const { endpoint, keys, mobile } = req.body;
+  const existing = await PushSubscription.findOne({ endpoint });
+  if (existing) {
+    return res.json({ success: true, already: true });
+  }
+  await PushSubscription.create({
+    endpoint,
+    keys,
+    mobile
+  });
+  res.json({ success: true });
+});
+
 app.set("io", io);
 const onlineUsers = new Map();
-app.use(express.json());
 app.use(express.static(__dirname));
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected."))
 .catch(err => console.log(err));
 
-// app.use(express.json());
 const authRoutes = require("./routes/auth");
-
 app.use("/auth", authRoutes);
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
@@ -66,6 +86,24 @@ io.on("connection", (socket) => {
     });
 
     io.to(roomId).emit("receiveMessage", data);
+      const subs = await PushSubscription.find({
+        mobile: { $ne: data.sender }
+    });
+      subs.forEach(async sub => {
+    try {
+      await webPush.sendNotification(
+        sub,
+        JSON.stringify({
+        title: "New Message 💬",
+        body: data.message
+      })
+    );
+    console.log("Push sent to:", sub.mobile);
+    } catch (err) {
+      console.error("Push error:", err.statusCode, err.body);
+    }
+    });
+      
     } catch (err) {
       console.error("Message save error:", err);
     }
@@ -88,6 +126,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
