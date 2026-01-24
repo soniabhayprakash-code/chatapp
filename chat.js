@@ -57,6 +57,20 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("joinRoom", { roomId });
   });
 
+  socket.on("loadMessages", (messages) => {
+
+    messages.forEach(msg => {
+
+      if (msg.sender === myMobile) {
+        addMessage(msg.message, "sent");
+      } else {
+        addMessage(msg.message, "received");
+      }
+
+   });
+
+  });
+
   function scrollToBottom() {
     setTimeout(() => {
       chatBox.scrollTop = chatBox.scrollHeight;
@@ -189,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
 
 
 
