@@ -72,7 +72,7 @@ html,body{
     color: rgb(8, 8, 8);
     font-size: 20px;
     padding: 25px;
-    padding-top: 100px;
+    padding-top: 120px;
     padding-bottom: 200px;
     overscroll-behavior: contain;
     overflow-y: auto;
@@ -221,6 +221,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
