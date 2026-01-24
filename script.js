@@ -7,6 +7,11 @@ function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
 
+function showAlert1(message) {
+    document.getElementById("alertMessage1").textContent = message;
+    document.getElementById("customAlert1").classList.remove("hidden");
+}
+
 const myMobile = localStorage.getItem("myMobile");
 if (myMobile) {
     window.location.href = "profile.html";
@@ -62,10 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.success) {
         localStorage.clear();          
         localStorage.setItem("myMobile", mobile);
-        showAlert(data.message);
+        showAlert1(data.message);
         window.location.href = "profile.html";
       } else {
-        showAlert(data.message);
+        showAlert1(data.message);
         registerBtn.disabled = false;
       }
 
@@ -94,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
 
