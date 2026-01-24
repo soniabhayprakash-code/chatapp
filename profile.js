@@ -6,6 +6,11 @@ function showAlert(message) {
 function closeAlert() {
   document.getElementById("customAlert").classList.add("hidden");
 }
+
+function showAlert1(message) {
+    document.getElementById("alertMessage1").textContent = message;
+    document.getElementById("customAlert1").classList.remove("hidden");
+}
 document.addEventListener("DOMContentLoaded", () => {
 
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
@@ -136,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         localStorage.clear();
 
-        showAlert("Account deleted successfully.");
+        showAlert1("Account deleted successfully.");
 
         window.location.href = "index.html";
 
@@ -150,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
 
