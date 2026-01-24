@@ -1,0 +1,18 @@
+{
+  "name": "chatapp",
+  "version": "1.0.0",
+  "description": "Real-time chat app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.5",
+    "web-push": "^3.6.7"
+  }
+}
