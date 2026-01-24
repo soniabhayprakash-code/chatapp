@@ -2,6 +2,7 @@ const express = require('express');
 require("dotenv").config();
 const app = express();
 const http = require('http').createServer(app);
+const Message = require("./models/Message");
 const mongoose = require("mongoose");
 const io = require('socket.io')(http, {
     cors: {
@@ -35,11 +36,12 @@ io.on("connection", (socket) => {
     console.log("Online:", mobile);
   });
 
-  socket.on("joinRoom", ({ roomId }) => {
+  socket.on("joinRoom", async ({ roomId }) => {
     socket.join(roomId);
-    console.log(`Socket ${socket.id} joined room ${roomId}`);
+    const chats = await Message.find({ roomId })
+          .sort({ createdAt: 1 });
+    socket.emit("loadMessages", chats);
 
-    socket.emit("roomJoined", { roomId });
   });
 
   socket.on("typing", ({ roomId, mobile }) => {
@@ -50,8 +52,24 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("hideTyping");
   });
 
-  socket.on("sendMessage", (data) => {
-    io.to(data.roomId).emit("receiveMessage", data);
+  socket.on("sendMessage", async (data) => {
+  try {
+    const { roomId, sender, message } = data;
+    const users = roomId.split("_");
+    const receiver = users.find(m => m !== sender);
+
+    await Message.create({
+      roomId,
+      sender,
+      receiver,
+      message
+    });
+
+    io.to(roomId).emit("receiveMessage", data);
+    } catch (err) {
+      console.error("Message save error:", err);
+    }
+
   });
 
   socket.on("disconnect", () => {
@@ -71,12 +89,7 @@ http.listen(PORT, () => {
     console.log("Server running on port", PORT);
 });
 
-// http.listen(3000, () => {
-//     console.log('=====================================');
-//     console.log('--Started--');
-//     console.log('Go to Browser: http://localhost:3000');
-//     console.log('=====================================');
-// });
+
 
 
 
