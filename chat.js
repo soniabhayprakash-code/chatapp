@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("joinRoom", { roomId });
   });
 
+  function scrollToBottom() {
+    setTimeout(() => {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 50);
+  }
+  
   socket.on("loadMessages", (messages) => {
 
     messages.forEach(msg => {
@@ -70,12 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
    });
 
   });
-
-  function scrollToBottom() {
-    setTimeout(() => {
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }, 50);
-  }
 
   if ('virtualKeyboard' in navigator) {
         navigator.virtualKeyboard.overlaysContent = true;
@@ -203,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
 
 
 
