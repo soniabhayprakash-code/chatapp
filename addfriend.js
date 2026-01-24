@@ -7,6 +7,11 @@ function closeAlert() {
   document.getElementById("customAlert").classList.add("hidden");
 }
 
+function showAlert1(message) {
+  document.getElementById("alertMessage1").textContent = message;
+  document.getElementById("customAlert1").classList.remove("hidden");
+}
+
 async function addFriend() {
   const BASE_URL = "https://chatapp-1-suv6.onrender.com";
   const friendMobileInput = document.getElementById("addfriend");
@@ -56,7 +61,7 @@ async function addFriend() {
       return;
     }
 
-    showAlert("Friend added successfully.");
+    showAlert1("Friend added successfully.");
 
     window.location.href = "profile.html";
 
@@ -65,6 +70,7 @@ async function addFriend() {
     showAlert("--Server error--");
   }
 }
+
 
 
 
