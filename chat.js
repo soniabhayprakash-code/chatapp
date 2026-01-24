@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function scrollToBottom() {
     setTimeout(() => {
       chatBox.scrollTop = chatBox.scrollHeight;
-    }, 100);
+    }, 50);
   }
   
   socket.on("loadMessages", (messages) => {
@@ -203,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
 
 
 
