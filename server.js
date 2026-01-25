@@ -38,8 +38,6 @@ app.post("/subscribe", async (req, res) => {
 app.set("io", io);
 const onlineUsers = new Map();
 
-const activeRooms = new Map(); 
-
 app.use(express.static(__dirname));
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected."))
@@ -56,14 +54,12 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("register-user", (mobile) => {
-    socket.mobile = mobile;
     onlineUsers.set(mobile, socket.id);
     console.log("Online:", mobile);
   });
 
-  socket.on("joinRoom", async ({ roomId, mobile }) => {
+  socket.on("joinRoom", async ({ roomId }) => {
     socket.join(roomId);
-      activeRooms.set(mobile, roomId);
     const chats = await Message.find({ roomId })
           .sort({ createdAt: 1 });
     socket.emit("loadMessages", chats);
@@ -92,12 +88,9 @@ io.on("connection", (socket) => {
     });
 
     io.to(roomId).emit("receiveMessage", data);
-    //   const subs = await PushSubscription.find({
-    //     mobile: { $ne: data.sender }
-    // });
-      const receiverActiveRoom = activeRooms.get(receiver);
-      if (receiverActiveRoom !== roomId) {
-         const subs = await PushSubscription.find({ mobile: receiver });
+      const subs = await PushSubscription.find({
+        mobile: { $ne: data.sender }
+      });
       subs.forEach(async sub => {
       const senderUser = await User.findOne({ mobile: sender });
       const senderName = senderUser?.name || "Someone";
@@ -125,9 +118,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-      if (socket.mobile) {
-         activeRooms.delete(socket.mobile);
-    }
     for (let [mobile, id] of onlineUsers.entries()) {
       if (id === socket.id) {
         onlineUsers.delete(mobile);
@@ -143,6 +133,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
