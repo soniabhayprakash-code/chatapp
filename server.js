@@ -110,7 +110,6 @@ io.on("connection", (socket) => {
       console.error("Push error:", err.statusCode, err.body);
     }
     });
-      }
     } catch (err) {
       console.error("Message save error:", err);
     }
@@ -133,6 +132,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
