@@ -2,6 +2,7 @@ const express = require('express');
 require("dotenv").config();
 const app = express();
 const http = require('http').createServer(app);
+const User = require("./models/user");
 const Message = require("./models/Message");
 const PushSubscription = require("./models/pushSubscription");
 const mongoose = require("mongoose");
@@ -90,12 +91,18 @@ io.on("connection", (socket) => {
         mobile: { $ne: data.sender }
     });
       subs.forEach(async sub => {
+      const senderUser = await User.findOne({ mobile: sender });
+      const senderName = senderUser?.name || "Someone";
     try {
       await webPush.sendNotification(
-        sub,
-        JSON.stringify({
-        title: "New Message 💬",
-        body: data.message
+      sub,
+      JSON.stringify({
+      title: `New Message From ${senderName}`,
+      body: data.message,
+      icon: "/icons/icon-192.png",
+      data: {
+        url: "/chat.html"
+      }
       })
     );
     console.log("Push sent to:", sub.mobile);
@@ -126,6 +133,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
