@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let pushSubscribed = false;
   socket.on("connect", () => {
     console.log("Socket connected:", socket.id);
-    socket.emit("joinRoom", { roomId });
+    socket.emit("joinRoom", { roomId, mobile: myMobile });
     if (!pushSubscribed) {
       subscribeUser();
       pushSubscribed = true;
@@ -263,6 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 });
+
 
 
 
