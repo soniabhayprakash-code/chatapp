@@ -97,9 +97,9 @@ io.on("connection", (socket) => {
       await webPush.sendNotification(
       sub,
       JSON.stringify({
-      title: `New Message From ${senderName}`,
+      title: `${senderName} send Message`,
       body: data.message,
-      icon: "/icons/icon-192.png",
+      // icon: "/icons/icon-192.png",
       data: {
         url: "/chat.html"
       }
@@ -133,6 +133,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
