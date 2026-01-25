@@ -99,7 +99,6 @@ io.on("connection", (socket) => {
       JSON.stringify({
       title: `${senderName} send Message`,
       body: data.message,
-      // icon: "/icons/icon-192.png",
       data: {
         url: "/chat.html"
       }
@@ -133,6 +132,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
