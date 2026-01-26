@@ -79,8 +79,8 @@ html,body{
   cursor: pointer;
 }
 .call-icon{
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   object-fit: contain;
 }
 #endCallBtn{
@@ -255,6 +255,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
