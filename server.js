@@ -116,21 +116,86 @@ io.on("connection", (socket) => {
 
   });
 
-    socket.on("call-offer", data => {
-    socket.to(data.roomId).emit("call-offer", data);
+    socket.on("call-user", async ({ to, from }) => {
+
+  const user = await User.findOne({ mobile: from });
+  const senderName = user?.name || "Unknown";
+
+  const targetSocket = onlineUsers.get(to);
+  if (!targetSocket) {
+      console.log("User offline:", to);
+      return;
+    }
+
+  if (targetSocket) {
+    io.to(targetSocket).emit("incoming-call", {
+      from,
+      name: senderName
+    });
+  }
+
   });
 
-  socket.on("call-answer", data => {
-    socket.to(data.roomId).emit("call-answer", data);
-  });
+  socket.on("call-offer", ({ to, offer, from, name }) => {
+  const targetSocket = onlineUsers.get(to);
+  if (!targetSocket) {
+      console.log("User offline:", to);
+      return;
+  }
 
-  socket.on("call-ice", data => {
-    socket.to(data.roomId).emit("call-ice", data);
-  });
+  if (targetSocket) {
+    io.to(targetSocket).emit("call-offer", {
+      offer,
+      from,
+      name
+    });
+  }
+});
 
-  socket.on("call-end", data => {
-    socket.to(data.roomId).emit("call-end");
-  });
+
+socket.on("call-answer", ({ to, from, answer }) => {
+
+  const targetSocket = onlineUsers.get(to);
+  if (!targetSocket) {
+      console.log("User offline:", to);
+      return;
+  }
+
+  if (targetSocket) {
+    io.to(targetSocket).emit("call-answer", {
+      answer,
+      from
+    });
+  }
+});
+
+socket.on("call-ice", ({ to, candidate, from }) => {
+
+  const targetSocket = onlineUsers.get(to);
+  if (!targetSocket) {
+      console.log("User offline:", to);
+      return;
+  }
+
+  if (targetSocket) {
+    io.to(targetSocket).emit("call-ice", {
+      candidate,
+      from
+    });
+  }
+});
+
+socket.on("call-end", ({ to }) => {
+  const targetSocket = onlineUsers.get(to);
+  if (!targetSocket) {
+      console.log("User offline:", to);
+      return;
+  }
+
+  if (targetSocket) {
+    io.to(targetSocket).emit("call-end");
+  }
+});
 
   socket.on("disconnect", () => {
     for (let [mobile, id] of onlineUsers.entries()) {
@@ -148,6 +213,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
