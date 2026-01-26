@@ -116,6 +116,22 @@ io.on("connection", (socket) => {
 
   });
 
+    socket.on("call-offer", data => {
+    socket.to(data.roomId).emit("call-offer", data);
+  });
+
+  socket.on("call-answer", data => {
+    socket.to(data.roomId).emit("call-answer", data);
+  });
+
+  socket.on("call-ice", data => {
+    socket.to(data.roomId).emit("call-ice", data);
+  });
+
+  socket.on("call-end", data => {
+    socket.to(data.roomId).emit("call-end");
+  });
+
   socket.on("disconnect", () => {
     for (let [mobile, id] of onlineUsers.entries()) {
       if (id === socket.id) {
@@ -132,6 +148,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
