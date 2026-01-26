@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let localStream = null;
   let peerConnection = null;
-  let inCall = false;
+  let currentCallUser = null;
 
   let typingTimeout;
   let isTyping = false;
@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       subscribeUser();
       pushSubscribed = true;
     }
+    socket.emit("register-user", myMobile);
   });
 
   socket.on("roomJoined", (data) => {
@@ -266,44 +267,48 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 }
 
-  async function getAudioStream() {
-  localStream = await navigator.mediaDevices.getUserMedia({
-    audio: true
-  });
-}
-const rtcConfig = {
+ const rtcConfig = {
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" }
   ]
 };
 
-  const callBtn = document.getElementById("voiceCallBtn");
+async function getAudioStream() {
+  localStream = await navigator.mediaDevices.getUserMedia({
+    audio: {
+      echoCancellation: true,
+      noiseSuppression: true,
+      autoGainControl: true
+    }
+  });
+
+  return localStream;
+}
+
+
+
+const callBtn = document.getElementById("voiceCallBtn");
 const endBtn = document.getElementById("endCallBtn");
 
 callBtn.addEventListener("click", async () => {
 
+  currentCallUser = friendMobile;
+
   await getAudioStream();
+  await createPeer();
 
-  peerConnection = new RTCPeerConnection(rtcConfig);
-
-  localStream.getTracks().forEach(track => {
-    peerConnection.addTrack(track, localStream);
+  socket.emit("call-user", {
+    to: friendMobile,
+    from: myMobile
   });
-
-  peerConnection.onicecandidate = e => {
-    if (e.candidate) {
-      socket.emit("call-ice", {
-        roomId,
-        candidate: e.candidate
-      });
-    }
-  };
 
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
 
   socket.emit("call-offer", {
-    roomId,
+    to: friendMobile,
+    from: myMobile,
+    name: localStorage.getItem("myName"),
     offer
   });
 
@@ -312,11 +317,9 @@ callBtn.addEventListener("click", async () => {
 });
 
 
-socket.on("call-offer", async ({ offer }) => {
+socket.on("call-offer", async ({ offer, from }) => {
 
-  const accept = confirm("📞 Incoming call. Accept?");
-
-  if (!accept) return;
+  currentCallUser = from;
 
   await getAudioStream();
 
@@ -327,18 +330,19 @@ socket.on("call-offer", async ({ offer }) => {
   });
 
   peerConnection.onicecandidate = e => {
-    if (e.candidate) {
-      socket.emit("call-ice", {
-        roomId,
-        candidate: e.candidate
-      });
-    }
+  if (e.candidate && currentCallUser) {
+    socket.emit("call-ice", {
+      to: currentCallUser,
+      candidate: e.candidate
+    });
+   }
   };
 
+
   peerConnection.ontrack = e => {
-    const audio = document.createElement("audio");
-    audio.srcObject = e.streams[0];
-    audio.autoplay = true;
+    const remoteAudio = document.getElementById("remoteAudio");
+    remoteAudio.srcObject = e.streams[0];
+    remoteAudio.play().catch(err => console.log("Play blocked:", err));
   };
 
   await peerConnection.setRemoteDescription(offer);
@@ -347,11 +351,43 @@ socket.on("call-offer", async ({ offer }) => {
   await peerConnection.setLocalDescription(answer);
 
   socket.emit("call-answer", {
-    roomId,
+    to: currentCallUser,
+    from: myMobile,
     answer
   });
 
 });
+
+async function createPeer() {
+
+  peerConnection = new RTCPeerConnection(rtcConfig);
+
+  localStream.getTracks().forEach(track => {
+    peerConnection.addTrack(track, localStream);
+  });
+
+  peerConnection.ontrack = e => {
+    const remoteAudio = document.getElementById("remoteAudio");
+    remoteAudio.srcObject = e.streams[0];
+    remoteAudio.play().catch(err => console.log("Play blocked:", err));
+  };
+
+  peerConnection.onicecandidate = e => {
+    if (e.candidate && currentCallUser) {
+      socket.emit("call-ice", {
+        to: currentCallUser,
+        candidate: e.candidate
+      });
+    }
+  };
+
+}
+
+socket.on("incoming-call", ({ from, name }) => {
+  currentCallUser = from;
+  showIncomingCallUI(name);
+});
+
 
 socket.on("call-answer", async ({ answer }) => {
   await peerConnection.setRemoteDescription(answer);
@@ -367,7 +403,9 @@ endBtn.addEventListener("click", () => {
   peerConnection?.close();
   localStream?.getTracks().forEach(t => t.stop());
 
-  socket.emit("call-end", { roomId });
+  socket.emit("call-end", {
+    to: currentCallUser
+  });
 
   endBtn.style.display = "none";
   callBtn.style.display = "block";
@@ -378,7 +416,48 @@ socket.on("call-end", () => {
   alert("Call ended");
 });
 
+function showIncomingCallUI(name) {
+
+  let box = document.getElementById("incomingCallBox");
+
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "incomingCallBox";
+
+    box.style.position = "fixed";
+    box.style.top = "20px";
+    box.style.left = "50%";
+    box.style.transform = "translateX(-50%)";
+    box.style.background = "black";
+    box.style.color = "white";
+    box.style.padding = "15px 25px";
+    box.style.borderRadius = "20px";
+    box.style.zIndex = "9999";
+
+    box.innerHTML = `
+      📞 <b>${name}</b> is calling...
+      <br><br>
+      <button id="acceptCallBtn">Accept</button>
+      <button id="rejectCallBtn">Reject</button>
+    `;
+
+    document.body.appendChild(box);
+
+    document.getElementById("acceptCallBtn").onclick = () => {
+      box.remove();
+      socket.emit("accept-call", { to: currentCallUser });
+    };
+
+    document.getElementById("rejectCallBtn").onclick = () => {
+      box.remove();
+      socket.emit("call-end", { to: currentCallUser });
+    };
+  }
+}
+
+  
 });
+
 
 
 
