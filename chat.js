@@ -18,6 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const typing = document.getElementById("typing");
   const typingIndicator = document.getElementById("typingIndicator");
 
+  let localStream = null;
+  let peerConnection = null;
+  let inCall = false;
+
   let typingTimeout;
   let isTyping = false;
 
@@ -262,7 +266,120 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 }
 
+  async function getAudioStream() {
+  localStream = await navigator.mediaDevices.getUserMedia({
+    audio: true
+  });
+}
+const rtcConfig = {
+  iceServers: [
+    { urls: "stun:stun.l.google.com:19302" }
+  ]
+};
+
+  const callBtn = document.getElementById("voiceCallBtn");
+const endBtn = document.getElementById("endCallBtn");
+
+callBtn.addEventListener("click", async () => {
+
+  await getAudioStream();
+
+  peerConnection = new RTCPeerConnection(rtcConfig);
+
+  localStream.getTracks().forEach(track => {
+    peerConnection.addTrack(track, localStream);
+  });
+
+  peerConnection.onicecandidate = e => {
+    if (e.candidate) {
+      socket.emit("call-ice", {
+        roomId,
+        candidate: e.candidate
+      });
+    }
+  };
+
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
+
+  socket.emit("call-offer", {
+    roomId,
+    offer
+  });
+
+  callBtn.style.display = "none";
+  endBtn.style.display = "block";
 });
+
+
+socket.on("call-offer", async ({ offer }) => {
+
+  const accept = confirm("📞 Incoming call. Accept?");
+
+  if (!accept) return;
+
+  await getAudioStream();
+
+  peerConnection = new RTCPeerConnection(rtcConfig);
+
+  localStream.getTracks().forEach(track => {
+    peerConnection.addTrack(track, localStream);
+  });
+
+  peerConnection.onicecandidate = e => {
+    if (e.candidate) {
+      socket.emit("call-ice", {
+        roomId,
+        candidate: e.candidate
+      });
+    }
+  };
+
+  peerConnection.ontrack = e => {
+    const audio = document.createElement("audio");
+    audio.srcObject = e.streams[0];
+    audio.autoplay = true;
+  };
+
+  await peerConnection.setRemoteDescription(offer);
+
+  const answer = await peerConnection.createAnswer();
+  await peerConnection.setLocalDescription(answer);
+
+  socket.emit("call-answer", {
+    roomId,
+    answer
+  });
+
+});
+
+socket.on("call-answer", async ({ answer }) => {
+  await peerConnection.setRemoteDescription(answer);
+});
+
+socket.on("call-ice", async ({ candidate }) => {
+  if (candidate && peerConnection) {
+    await peerConnection.addIceCandidate(candidate);
+  }
+});
+
+endBtn.addEventListener("click", () => {
+  peerConnection?.close();
+  localStream?.getTracks().forEach(t => t.stop());
+
+  socket.emit("call-end", { roomId });
+
+  endBtn.style.display = "none";
+  callBtn.style.display = "block";
+});
+
+socket.on("call-end", () => {
+  peerConnection?.close();
+  alert("Call ended");
+});
+
+});
+
 
 
 
