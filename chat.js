@@ -460,7 +460,7 @@ function showIncomingCallUI(name) {
 
     document.getElementById("acceptCallBtn").onclick = () => {
       box.remove();
-      socket.emit("accept-call", { to: currentCallUser });
+      socket.emit("call-answer", { to: currentCallUser });
     };
 
     document.getElementById("rejectCallBtn").onclick = () => {
@@ -472,6 +472,7 @@ function showIncomingCallUI(name) {
 
   
 });
+
 
 
 
