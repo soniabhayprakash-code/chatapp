@@ -294,22 +294,9 @@ callBtn.addEventListener("click", async () => {
 
   currentCallUser = friendMobile;
 
-  await getAudioStream();
-  await createPeer();
-
   socket.emit("call-user", {
     to: friendMobile,
     from: myMobile
-  });
-
-  const offer = await peerConnection.createOffer();
-  await peerConnection.setLocalDescription(offer);
-
-  socket.emit("call-offer", {
-    to: friendMobile,
-    from: myMobile,
-    name: localStorage.getItem("myName"),
-    offer
   });
 
   callBtn.style.display = "none";
@@ -324,6 +311,22 @@ callBtn.addEventListener("click", async () => {
 
 socket.on("call-answer", async ({ answer }) => {
   await peerConnection.setRemoteDescription(answer);
+});
+
+socket.on("call-accepted", async () => {
+
+  await getAudioStream();
+  await createPeer();
+
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
+
+  socket.emit("call-offer", {
+    to: currentCallUser,
+    from: myMobile,
+    offer
+  });
+
 });
 
 socket.on("call-ice", async ({ candidate }) => {
@@ -398,22 +401,6 @@ async function createPeer() {
 
 }
 
-// socket.on("incoming-call", ({ from, name }) => {
-//   currentCallUser = from;
-//   showIncomingCallUI(name);
-// });
-
-
-// socket.on("call-answer", async ({ answer }) => {
-//   await peerConnection.setRemoteDescription(answer);
-// });
-
-// socket.on("call-ice", async ({ candidate }) => {
-//   if (candidate && peerConnection) {
-//     await peerConnection.addIceCandidate(candidate);
-//   }
-// });
-
 endBtn.addEventListener("click", () => {
   peerConnection?.close();
   localStream?.getTracks().forEach(t => t.stop());
@@ -458,9 +445,11 @@ function showIncomingCallUI(name) {
 
     document.body.appendChild(box);
 
-    document.getElementById("acceptCallBtn").onclick = () => {
+   document.getElementById("acceptCallBtn").onclick = async () => {
       box.remove();
       socket.emit("call-answer", { to: currentCallUser });
+      await getAudioStream();
+      await createPeer();
     };
 
     document.getElementById("rejectCallBtn").onclick = () => {
@@ -472,6 +461,7 @@ function showIncomingCallUI(name) {
 
   
 });
+
 
 
 
