@@ -445,7 +445,7 @@ function showIncomingCallUI(name) {
     box.style.transform = "translateX(-50%)";
     box.style.background = "black";
     box.style.color = "white";
-    box.style.padding = "50px 15px";
+    box.style.padding = "50px 10px";
     box.style.borderRadius = "20px";
     box.style.zIndex = "9999";
 
@@ -472,6 +472,7 @@ function showIncomingCallUI(name) {
 
   
 });
+
 
 
 
