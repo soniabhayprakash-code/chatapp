@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let localStream = null;
   let peerConnection = null;
   let currentCallUser = null;
+  let callState = "IDLE";
 
   let typingTimeout;
   let isTyping = false;
@@ -267,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 }
 
- const rtcConfig = {
+const rtcConfig = {
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" }
   ]
@@ -285,6 +286,26 @@ async function getAudioStream() {
   return localStream;
 }
 
+function setCallIcon(state) {
+
+  const callBtn = document.getElementById("voiceCallBtn");
+  const endBtn = document.getElementById("endCallBtn");
+
+  if (!callBtn || !endBtn) return;
+
+  if (state === "IDLE") {
+    callBtn.style.display = "block";
+    endBtn.style.display = "none";
+  }
+
+  if (state === "CALLING" || state === "IN_CALL") {
+    callBtn.style.display = "none";
+    endBtn.style.display = "block";
+  }
+}
+
+
+
 
 
 const callBtn = document.getElementById("voiceCallBtn");
@@ -293,6 +314,9 @@ const endBtn = document.getElementById("endCallBtn");
 callBtn.addEventListener("click", async () => {
 
   currentCallUser = friendMobile;
+  callState = "CALLING";
+  setCallIcon("CALLING");
+  showCallingUI();
 
   socket.emit("call-user", {
     to: friendMobile,
@@ -303,37 +327,6 @@ callBtn.addEventListener("click", async () => {
   endBtn.style.display = "block";
 });
 
-  socket.on("incoming-call", ({ from, name }) => {
-  currentCallUser = from;
-  showIncomingCallUI(name);
-});
-
-
-socket.on("call-answer", async ({ answer }) => {
-  await peerConnection.setRemoteDescription(answer);
-});
-
-socket.on("call-accepted", async () => {
-
-  await getAudioStream();
-  await createPeer();
-
-  const offer = await peerConnection.createOffer();
-  await peerConnection.setLocalDescription(offer);
-
-  socket.emit("call-offer", {
-    to: currentCallUser,
-    from: myMobile,
-    offer
-  });
-
-});
-
-socket.on("call-ice", async ({ candidate }) => {
-  if (candidate && peerConnection) {
-    await peerConnection.addIceCandidate(candidate);
-  }
-});
 
 socket.on("call-offer", async ({ offer, from }) => {
 
@@ -401,6 +394,43 @@ async function createPeer() {
 
 }
 
+socket.on("incoming-call", ({ from, name }) => {
+  currentCallUser = from;
+  callState = "RINGING";
+  setCallIcon("RINGING");
+  showIncomingCallUI(name);
+});
+
+
+socket.on("call-answer", async ({ answer }) => {
+  await peerConnection.setRemoteDescription(answer);
+});
+
+
+socket.on("call-accepted", async () => {
+  removeCallingUI();
+
+  await getAudioStream();
+  await createPeer();
+
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
+
+  socket.emit("call-offer", {
+    to: currentCallUser,
+    from: myMobile,
+    offer
+  });
+
+});
+
+
+socket.on("call-ice", async ({ candidate }) => {
+  if (candidate && peerConnection) {
+    await peerConnection.addIceCandidate(candidate);
+  }
+});
+
 endBtn.addEventListener("click", () => {
   peerConnection?.close();
   localStream?.getTracks().forEach(t => t.stop());
@@ -408,6 +438,8 @@ endBtn.addEventListener("click", () => {
   socket.emit("call-end", {
     to: currentCallUser
   });
+  callState = "IDLE";
+  setCallIcon("IDLE");
 
   endBtn.style.display = "none";
   callBtn.style.display = "block";
@@ -415,6 +447,12 @@ endBtn.addEventListener("click", () => {
 
 socket.on("call-end", () => {
   peerConnection?.close();
+
+  callState = "IDLE";
+  setCallIcon("IDLE");
+
+  removeCallingUI();
+  removeCallingUI1()
   showAlert("Call Ended");
 });
 
@@ -432,7 +470,7 @@ function showIncomingCallUI(name) {
     box.style.transform = "translateX(-50%)";
     box.style.background = "black";
     box.style.color = "white";
-    box.style.padding = "50px 10px";
+    box.style.padding = "25px 25px";
     box.style.borderRadius = "20px";
     box.style.zIndex = "9999";
 
@@ -443,11 +481,14 @@ function showIncomingCallUI(name) {
       <button id="rejectCallBtn">Reject</button>
     `;
 
+
     document.body.appendChild(box);
 
-   document.getElementById("acceptCallBtn").onclick = async () => {
+    document.getElementById("acceptCallBtn").onclick = async () => {
+      callState = "IN_CALL";
+      setCallIcon("IN_CALL");
       box.remove();
-      socket.emit("call-answer", { to: currentCallUser });
+      socket.emit("accept-call", { to: currentCallUser });
       await getAudioStream();
       await createPeer();
     };
@@ -459,8 +500,55 @@ function showIncomingCallUI(name) {
   }
 }
 
+function showCallingUI() {
+
+  let box = document.getElementById("callingBox");
+
+  if (box) return;
+
+  box = document.createElement("div");
+  box.id = "callingBox";
+
+  box.style.position = "fixed";
+  box.style.top = "20px";
+  box.style.left = "50%";
+  box.style.transform = "translateX(-50%)";
+  box.style.background = "black";
+  box.style.color = "white";
+  box.style.padding = "22px 26px";
+  box.style.borderRadius = "18px";
+  box.style.zIndex = "9999";
+  box.style.textAlign = "center";
+  box.style.minWidth = "220px";
+
+  const friendName = document.getElementById("chatUserName")?.innerText || "Friend";
+
+  box.innerHTML = `
+      📞 <b>Calling ${friendName}...</b>
+      <br><br>
+      <button id="cancelCallBtn">Cancel</button>
+  `;
+
+  document.body.appendChild(box);
+
+  document.getElementById("cancelCallBtn").onclick = () => {
+    socket.emit("call-end", { to: currentCallUser });
+    removeCallingUI();
+    setCallIcon("IDLE"); 
+  };
+}
+
+function removeCallingUI() {
+  document.getElementById("callingBox")?.remove();
+}
+
+function removeCallingUI1() {
+  document.getElementById("incomingCallBox")?.remove();
+}
+
   
 });
+
 
 
 
