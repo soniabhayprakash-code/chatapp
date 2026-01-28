@@ -116,7 +116,7 @@ io.on("connection", (socket) => {
 
   });
 
-    socket.on("call-user", async ({ to, from }) => {
+   socket.on("call-user", async ({ to, from }) => {
 
   const user = await User.findOne({ mobile: from });
   const senderName = user?.name || "Unknown";
@@ -168,17 +168,14 @@ socket.on("call-answer", ({ to, from, answer }) => {
     });
   }
 });
-    
- socket.on("accept-call", ({ to }) => {
+
+socket.on("accept-call", ({ to }) => {
   const target = onlineUsers.get(to);
-     if (!target) {
-      console.log("User offline:", to);
-      return;
-  }
   if (target) {
     io.to(target).emit("call-accepted");
   }
 });
+
 
 socket.on("call-ice", ({ to, candidate, from }) => {
 
@@ -224,6 +221,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
