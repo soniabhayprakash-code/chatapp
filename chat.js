@@ -428,7 +428,7 @@ endBtn.addEventListener("click", () => {
 
 socket.on("call-end", () => {
   peerConnection?.close();
-  alert("Call ended");
+  showAlert("Call ended");
 });
 
 function showIncomingCallUI(name) {
@@ -472,6 +472,7 @@ function showIncomingCallUI(name) {
 
   
 });
+
 
 
 
