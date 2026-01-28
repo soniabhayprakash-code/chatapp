@@ -316,6 +316,21 @@ callBtn.addEventListener("click", async () => {
   endBtn.style.display = "block";
 });
 
+  socket.on("incoming-call", ({ from, name }) => {
+  currentCallUser = from;
+  showIncomingCallUI(name);
+});
+
+
+socket.on("call-answer", async ({ answer }) => {
+  await peerConnection.setRemoteDescription(answer);
+});
+
+socket.on("call-ice", async ({ candidate }) => {
+  if (candidate && peerConnection) {
+    await peerConnection.addIceCandidate(candidate);
+  }
+});
 
 socket.on("call-offer", async ({ offer, from }) => {
 
@@ -383,21 +398,21 @@ async function createPeer() {
 
 }
 
-socket.on("incoming-call", ({ from, name }) => {
-  currentCallUser = from;
-  showIncomingCallUI(name);
-});
+// socket.on("incoming-call", ({ from, name }) => {
+//   currentCallUser = from;
+//   showIncomingCallUI(name);
+// });
 
 
-socket.on("call-answer", async ({ answer }) => {
-  await peerConnection.setRemoteDescription(answer);
-});
+// socket.on("call-answer", async ({ answer }) => {
+//   await peerConnection.setRemoteDescription(answer);
+// });
 
-socket.on("call-ice", async ({ candidate }) => {
-  if (candidate && peerConnection) {
-    await peerConnection.addIceCandidate(candidate);
-  }
-});
+// socket.on("call-ice", async ({ candidate }) => {
+//   if (candidate && peerConnection) {
+//     await peerConnection.addIceCandidate(candidate);
+//   }
+// });
 
 endBtn.addEventListener("click", () => {
   peerConnection?.close();
@@ -457,6 +472,7 @@ function showIncomingCallUI(name) {
 
   
 });
+
 
 
 
