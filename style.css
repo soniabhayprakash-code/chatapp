@@ -101,6 +101,7 @@ html,body{
   object-fit: contain;
 }
 #cancelCallBtn{
+    margin-left: 50px;
     background: red;
     color: white;
     padding: 5px 5px;
@@ -108,6 +109,7 @@ html,body{
     border: none;
 }
 #acceptCallBtn{
+    margin-left: 50px;
     background: rgb(114, 210, 114);
     color: white;
     padding: 5px 5px;
@@ -115,6 +117,7 @@ html,body{
     border: none;
 }
 #rejectCallBtn{
+    margin-left: 8px;
     background: red;
     color: white;
     padding: 5px 5px;
@@ -123,8 +126,13 @@ html,body{
 }
 #incomingCallBox{
   position: fixed;
+  height: 8%;
+  width: 80%;
   top: 15%;
   left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: translateX(-50%);
   color: white;
   padding: 22px 26px;
@@ -138,8 +146,13 @@ html,body{
 }
 #callingBox{
   position: fixed;
+  height: 8%;
+  width: 80%;
   top: 15%;
   left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: translateX(-50%);
   color: white;
   padding: 22px 26px;
@@ -307,6 +320,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
