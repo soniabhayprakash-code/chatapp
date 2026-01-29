@@ -332,7 +332,6 @@ li.received .bubble {
   border-radius: 8px;
   background: black;
   color: white;
-  border: 1px solid white;
   font-weight: bold;
 }
 .alert-box button:hover{
@@ -343,6 +342,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
