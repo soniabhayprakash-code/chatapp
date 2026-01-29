@@ -182,7 +182,6 @@ html,body{
   border-radius: 8px;
   background: black;
   color: white;
-  border: 1px solid white;
   font-weight: bold;
 }
 .alert-box button:hover{
@@ -193,6 +192,7 @@ html,body{
 .hidden {
   display: none;
 }
+
 
 
 
