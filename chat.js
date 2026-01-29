@@ -543,7 +543,7 @@ function showIncomingCallUI(name) {
     box.id = "incomingCallBox";
 
     box.innerHTML = `
-      📞 ${name} is calling...
+      <p>📞 ${name} is calling...</p>
       <button id="acceptCallBtn">Accept</button>
       <button id="rejectCallBtn">Reject</button>
     `;
@@ -577,7 +577,7 @@ function showCallingUI() {
   box.id = "callingBox";
 
   box.innerHTML = `
-      📞 Calling to Friend...
+      <p>📞 Calling to Friend...</p>
       <button id="cancelCallBtn">Cancel</button>
   `;
 
@@ -600,6 +600,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
