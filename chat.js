@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let peerConnection = null;
   let currentCallUser = null;
   let callState = "IDLE";
+  let pendingIceCandidates = [];
 
   let typingTimeout;
   let isTyping = false;
@@ -330,36 +331,52 @@ callBtn.addEventListener("click", async () => {
 
 socket.on("call-offer", async ({ offer, from }) => {
 
+  if (callState !== "IN_CALL") return;
   currentCallUser = from;
 
-  await getAudioStream();
-
-  peerConnection = new RTCPeerConnection(rtcConfig);
-
-  localStream.getTracks().forEach(track => {
-    peerConnection.addTrack(track, localStream);
-  });
-
   peerConnection.onicecandidate = e => {
-  if (e.candidate && currentCallUser) {
+
+  if (
+    e.candidate &&
+    currentCallUser &&
+    peerConnection &&
+    peerConnection.signalingState !== "closed"
+  ) {
     socket.emit("call-ice", {
       to: currentCallUser,
       candidate: e.candidate
     });
-   }
+  }
+ 
   };
-
 
   peerConnection.ontrack = e => {
     const remoteAudio = document.getElementById("remoteAudio");
     remoteAudio.srcObject = e.streams[0];
+    remoteAudio.setAttribute("playsinline", true);
     remoteAudio.play().catch(err => console.log("Play blocked:", err));
   };
 
   await peerConnection.setRemoteDescription(offer);
+  for (const c of pendingIceCandidates) {
+  try {
+     await peerConnection.addIceCandidate(c);
+   } catch (e) {
+     console.error("Queued ICE failed:", e);
+   }
+  }
+
+  pendingIceCandidates = [];
 
   const answer = await peerConnection.createAnswer();
   await peerConnection.setLocalDescription(answer);
+  for (const c of pendingIceCandidates) {
+  try {
+     await peerConnection.addIceCandidate(c);
+   } catch (e) {
+     console.error("Queued ICE failed:", e);
+   }
+  }
 
   socket.emit("call-answer", {
     to: currentCallUser,
@@ -380,17 +397,26 @@ async function createPeer() {
   peerConnection.ontrack = e => {
     const remoteAudio = document.getElementById("remoteAudio");
     remoteAudio.srcObject = e.streams[0];
+    remoteAudio.setAttribute("playsinline", true);
     remoteAudio.play().catch(err => console.log("Play blocked:", err));
   };
 
   peerConnection.onicecandidate = e => {
-    if (e.candidate && currentCallUser) {
-      socket.emit("call-ice", {
-        to: currentCallUser,
-        candidate: e.candidate
-      });
-    }
+
+  if (
+    e.candidate &&
+    currentCallUser &&
+    peerConnection &&
+    peerConnection.signalingState !== "closed"
+  ) {
+    socket.emit("call-ice", {
+      to: currentCallUser,
+      candidate: e.candidate
+    });
+  }
+
   };
+
 
 }
 
@@ -404,6 +430,17 @@ socket.on("incoming-call", ({ from, name }) => {
 
 socket.on("call-answer", async ({ answer }) => {
   await peerConnection.setRemoteDescription(answer);
+  for (const c of pendingIceCandidates) {
+  try {
+     await peerConnection.addIceCandidate(c);
+   } catch (e) {
+     console.error("Queued ICE failed:", e);
+   }
+  }
+  pendingIceCandidates = [];
+  callState = "IN_CALL";
+  setCallIcon("IN_CALL");
+
 });
 
 
@@ -415,6 +452,16 @@ socket.on("call-accepted", async () => {
 
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
+  for (const c of pendingIceCandidates) {
+  try {
+     await peerConnection.addIceCandidate(c);
+   } catch (e) {
+     console.error("Queued ICE failed:", e);
+   }
+  }
+
+pendingIceCandidates = [];
+
 
   socket.emit("call-offer", {
     to: currentCallUser,
@@ -426,8 +473,22 @@ socket.on("call-accepted", async () => {
 
 
 socket.on("call-ice", async ({ candidate }) => {
-  if (candidate && peerConnection) {
+
+  if (!peerConnection) return;
+
+  if (
+    peerConnection.signalingState === "closed" ||
+    !peerConnection.remoteDescription
+  ) {
+    console.warn("⚠ ICE queued — peer not ready");
+    pendingIceCandidates.push(candidate);
+    return;
+  }
+
+  try {
     await peerConnection.addIceCandidate(candidate);
+  } catch (err) {
+    console.error("ICE add error:", err);
   }
 });
 
@@ -438,6 +499,8 @@ endBtn.addEventListener("click", () => {
   socket.emit("call-end", {
     to: currentCallUser
   });
+
+  pendingIceCandidates = [];
   callState = "IDLE";
   setCallIcon("IDLE");
 
@@ -446,15 +509,30 @@ endBtn.addEventListener("click", () => {
 });
 
 socket.on("call-end", () => {
-  peerConnection?.close();
 
   callState = "IDLE";
   setCallIcon("IDLE");
 
   removeCallingUI();
   removeCallingUI1()
+
+  if (peerConnection) {
+    peerConnection.ontrack = null;
+    peerConnection.onicecandidate = null;
+    peerConnection.close();
+    peerConnection = null;
+  }
+
+  localStream?.getTracks().forEach(t => t.stop());
+  localStream = null;
+
+  pendingIceCandidates = [];
+
+  console.log("📴 Call cleaned");
+
   showAlert("Call Ended");
 });
+
 
 function showIncomingCallUI(name) {
 
@@ -548,6 +626,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
