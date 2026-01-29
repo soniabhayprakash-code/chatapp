@@ -105,18 +105,21 @@ html,body{
     color: white;
     padding: 5px 5px;
     border-radius: 35px;
+    border: none;
 }
 #acceptCallBtn{
     background: rgb(114, 210, 114);
     color: white;
     padding: 5px 5px;
     border-radius: 35px;
+    border: none;
 }
 #rejectCallBtn{
     background: red;
     color: white;
     padding: 5px 5px;
     border-radius: 35px;
+    border: none;
 }
 #incomingCallBox{
   position: fixed;
@@ -304,6 +307,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
