@@ -528,7 +528,7 @@ socket.on("call-end", () => {
 
   pendingIceCandidates = [];
 
-  console.log("📴 Call cleaned");
+  console.log("Call Cleaned");
 
   showAlert("Call Ended");
 });
@@ -626,6 +626,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
