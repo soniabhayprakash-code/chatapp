@@ -118,6 +118,37 @@ html,body{
     padding: 5px 5px;
     border-radius: 35px;
 }
+#incomingCallBox{
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 22px 26px;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);  
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+#callingBox{
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 22px 26px;
+  z-index: 9999;
+  min-width: 220px;
+  background: rgba(0, 0, 0, 0.55);  
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
 #chat-box {
     flex: 1; 
     width: 100%;   
@@ -273,6 +304,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
