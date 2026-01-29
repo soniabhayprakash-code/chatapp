@@ -303,20 +303,25 @@ li.received .bubble {
 .alert-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
 }
 .alert-box {
-  background: #2a2a2a;
   color: #fff;
   width: 80%;
   max-width: 300px;
   padding: 20px;
   border-radius: 12px;
   text-align: center;
+  background: rgba(0, 0, 0, 0.55);  
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  font-size: 15px;
 }
 .alert-box p {
   margin-bottom: 15px;
@@ -338,6 +343,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
