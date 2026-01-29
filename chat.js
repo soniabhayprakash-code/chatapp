@@ -542,16 +542,6 @@ function showIncomingCallUI(name) {
     box = document.createElement("div");
     box.id = "incomingCallBox";
 
-    box.style.position = "fixed";
-    box.style.top = "20px";
-    box.style.left = "50%";
-    box.style.transform = "translateX(-50%)";
-    box.style.background = "black";
-    box.style.color = "white";
-    box.style.padding = "25px 25px";
-    box.style.borderRadius = "20px";
-    box.style.zIndex = "9999";
-
     box.innerHTML = `
       📞 <b>${name}</b> is calling...
       <br><br>
@@ -587,22 +577,8 @@ function showCallingUI() {
   box = document.createElement("div");
   box.id = "callingBox";
 
-  box.style.position = "fixed";
-  box.style.top = "20px";
-  box.style.left = "50%";
-  box.style.transform = "translateX(-50%)";
-  box.style.background = "black";
-  box.style.color = "white";
-  box.style.padding = "22px 26px";
-  box.style.borderRadius = "18px";
-  box.style.zIndex = "9999";
-  box.style.textAlign = "center";
-  box.style.minWidth = "220px";
-
-  const friendName = document.getElementById("chatUserName")?.innerText || "Friend";
-
   box.innerHTML = `
-      📞 <b>Calling ${friendName}...</b>
+      📞 <b>Calling to Friend...</b>
       <br><br>
       <button id="cancelCallBtn">Cancel</button>
   `;
@@ -626,6 +602,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
