@@ -473,6 +473,7 @@ socket.on("call-answer", async ({ answer }) => {
 
 
 socket.on("call-accepted", async () => {
+  stopOutgoingRingtone();
   removeCallingUI();
 
   await getAudioStream();
@@ -640,6 +641,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
