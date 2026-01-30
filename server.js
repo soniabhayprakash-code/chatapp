@@ -89,8 +89,9 @@ io.on("connection", (socket) => {
 
     io.to(roomId).emit("receiveMessage", data);
       const subs = await PushSubscription.find({
-        mobile: { $ne: data.sender }
+        mobile: receiver
       });
+
       subs.forEach(async sub => {
       const senderUser = await User.findOne({ mobile: sender });
       const senderName = senderUser?.name || "Someone";
@@ -221,6 +222,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
