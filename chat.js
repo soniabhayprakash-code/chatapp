@@ -315,6 +315,9 @@ const endBtn = document.getElementById("endCallBtn");
 callBtn.addEventListener("click", async () => {
 
   currentCallUser = friendMobile;
+  
+  playOutgoingRingtone();
+  
   callState = "CALLING";
   setCallIcon("CALLING");
   showCallingUI();
@@ -425,8 +428,33 @@ socket.on("incoming-call", ({ from, name }) => {
   callState = "RINGING";
   setCallIcon("RINGING");
   showIncomingCallUI(name);
+
+   playIncomingRingtone();
+  
 });
 
+const outgoingTone = document.getElementById("outgoingTone");
+const incomingTone = document.getElementById("incomingTone");
+
+function playOutgoingRingtone() {
+  outgoingTone.volume = 0.5;
+  outgoingTone.play().catch(()=>{});
+}
+
+function stopOutgoingRingtone() {
+  outgoingTone.pause();
+  outgoingTone.currentTime = 0;
+}
+
+function playIncomingRingtone() {
+  incomingTone.volume = 0.8;
+  incomingTone.play().catch(()=>{});
+}
+
+function stopIncomingRingtone() {
+  incomingTone.pause();
+  incomingTone.currentTime = 0;
+}
 
 socket.on("call-answer", async ({ answer }) => {
   await peerConnection.setRemoteDescription(answer);
@@ -513,6 +541,9 @@ socket.on("call-end", () => {
   callState = "IDLE";
   setCallIcon("IDLE");
 
+  stopIncomingRingtone();
+  stopOutgoingRingtone();
+
   removeCallingUI();
   removeCallingUI1()
 
@@ -552,6 +583,9 @@ function showIncomingCallUI(name) {
     document.body.appendChild(box);
 
     document.getElementById("acceptCallBtn").onclick = async () => {
+      
+      stopIncomingRingtone();
+      
       callState = "IN_CALL";
       setCallIcon("IN_CALL");
       box.remove();
@@ -561,6 +595,9 @@ function showIncomingCallUI(name) {
     };
 
     document.getElementById("rejectCallBtn").onclick = () => {
+      
+      stopIncomingRingtone();
+      
       box.remove();
       socket.emit("call-end", { to: currentCallUser });
     };
@@ -584,6 +621,9 @@ function showCallingUI() {
   document.body.appendChild(box);
 
   document.getElementById("cancelCallBtn").onclick = () => {
+    
+    stopOutgoingRingtone();
+    
     socket.emit("call-end", { to: currentCallUser });
     removeCallingUI();
     setCallIcon("IDLE"); 
@@ -600,6 +640,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
