@@ -23,17 +23,28 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") {
-    return;
-  }
+self.addEventListener("fetch", event => {
+
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
     fetch(event.request)
       .then(response => {
+
+        if (
+          response.status === 206 ||
+          !response.ok ||
+          event.request.url.includes("socket.io")
+        ) {
+          return response;
+        }
+
         const clone = response.clone();
+
         caches.open(CACHE_NAME).then(cache => {
           cache.put(event.request, clone);
         });
+
         return response;
       })
       .catch(() => caches.match(event.request))
@@ -60,6 +71,7 @@ self.addEventListener("notificationclick", event => {
     clients.openWindow(url)
   );
 });
+
 
 
 
