@@ -584,7 +584,6 @@ function showIncomingCallUI(name) {
 
     document.getElementById("acceptCallBtn").onclick = async () => {
       
-      stopOutgoingRingtone();
       stopIncomingRingtone();
       
       callState = "IN_CALL";
@@ -597,7 +596,6 @@ function showIncomingCallUI(name) {
 
     document.getElementById("rejectCallBtn").onclick = () => {
       
-      stopOutgoingRingtone();
       stopIncomingRingtone();
       
       box.remove();
@@ -625,7 +623,6 @@ function showCallingUI() {
   document.getElementById("cancelCallBtn").onclick = () => {
     
     stopOutgoingRingtone();
-    stopIncomingRingtone();
     
     socket.emit("call-end", { to: currentCallUser });
     removeCallingUI();
@@ -643,6 +640,7 @@ function removeCallingUI1() {
 
   
 });
+
 
 
 
