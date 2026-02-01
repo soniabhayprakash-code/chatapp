@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showAlert1(data.message);
         window.location.href = "profile.html";
       } else {
-        showAlert1(data.message);
+        showAlert(data.message);
         registerBtn.disabled = false;
       }
 
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
 
