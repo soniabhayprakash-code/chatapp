@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!data.success) {
         showAlert(data.message);
+        localStorage.clear();
         window.location.href = "index.html";
         return;
       }
@@ -156,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
 
