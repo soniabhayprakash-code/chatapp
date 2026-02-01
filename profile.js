@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("PROFILE DATA:", data);
 
       if (!data.success) {
-        showAlert(data.message);
+        showAlert1(data.message);
         localStorage.clear();
         window.location.href = "index.html";
         return;
@@ -157,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
   loadFriends();
 });
+
 
 
 
