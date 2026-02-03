@@ -35,6 +35,21 @@ app.post("/subscribe", async (req, res) => {
   res.json({ success: true });
 });
 
+app.post("/api/save-fcm-token", async (req, res) => {
+
+  const { token, mobile } = req.body;
+
+  if (!token) return res.sendStatus(400);
+
+  await User.updateOne(
+    { mobile },
+    { $set: { fcmToken: token } }
+  );
+
+  res.json({ success: true });
+});
+
+
 app.set("io", io);
 const onlineUsers = new Map();
 
@@ -222,6 +237,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
