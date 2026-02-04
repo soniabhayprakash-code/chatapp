@@ -51,13 +51,13 @@ app.post("/subscribe", async (req, res) => {
 
 app.post("/api/save-fcm-token", async (req, res) => {
 
-  console.log("🔥 TOKEN API HIT");
+  console.log("TOKEN API HIT");
   console.log(req.body);
 
   const { token, mobile } = req.body;
 
   if (!token || !mobile) {
-    console.log("❌ Missing token/mobile");
+    console.log("Missing token/mobile");
     return res.status(400).json({ error: "Missing data" });
   }
 
@@ -66,7 +66,7 @@ app.post("/api/save-fcm-token", async (req, res) => {
     { $set: { fcmToken: token } }
   );
 
-  console.log("🟢 Mongo result:", result);
+  console.log("Mongo result:", result);
 
   res.json({ success: true });
 });
@@ -304,6 +304,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
