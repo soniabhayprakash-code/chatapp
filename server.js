@@ -4,7 +4,7 @@ const app = express();
 const http = require('http').createServer(app);
 const User = require("./models/user");
 const Message = require("./models/Message");
-const PushSubscription = require("./models/pushSubscription");
+// const PushSubscription = require("./models/pushSubscription");
 
 
 const admin = require("firebase-admin");
@@ -26,27 +26,27 @@ const io = require('socket.io')(http, {
     }
 });
 
-const webPush = require("web-push");
-webPush.setVapidDetails(
-  "mailto:test@chatapp.com",
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+// const webPush = require("web-push");
+// webPush.setVapidDetails(
+//   "mailto:test@chatapp.com",
+//   process.env.VAPID_PUBLIC_KEY,
+//   process.env.VAPID_PRIVATE_KEY
+// );
 app.use(express.json());
-app.post("/subscribe", async (req, res) => {
+// app.post("/subscribe", async (req, res) => {
 
-  const { endpoint, keys, mobile } = req.body;
-  const existing = await PushSubscription.findOne({ endpoint });
-  if (existing) {
-    return res.json({ success: true, already: true });
-  }
-  await PushSubscription.create({
-    endpoint,
-    keys,
-    mobile
-  });
-  res.json({ success: true });
-});
+//   const { endpoint, keys, mobile } = req.body;
+//   const existing = await PushSubscription.findOne({ endpoint });
+//   if (existing) {
+//     return res.json({ success: true, already: true });
+//   }
+//   await PushSubscription.create({
+//     endpoint,
+//     keys,
+//     mobile
+//   });
+//   res.json({ success: true });
+// });
 
 
 app.post("/api/save-fcm-token", async (req, res) => {
@@ -304,6 +304,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
