@@ -141,9 +141,7 @@ io.on("connection", (socket) => {
     });
 
     io.to(roomId).emit("receiveMessage", data);
-
-
-      const receiverUser = await User.findOne({ mobile: receiver });
+    const receiverUser = await User.findOne({ mobile: receiver });
       if (receiverUser?.fcmToken) {
       const senderUser = await User.findOne({ mobile: sender });
       const senderName = senderUser?.name || "Someone";
@@ -168,7 +166,6 @@ io.on("connection", (socket) => {
 
   } else {
     console.log("No FCM token for:", receiver);
-  }
 
     //   const subs = await PushSubscription.find({
     //     mobile: receiver
@@ -199,7 +196,7 @@ io.on("connection", (socket) => {
 
   });
 
-   socket.on("call-user", async ({ to, from }) => {
+  socket.on("call-user", async ({ to, from }) => {
 
   const user = await User.findOne({ mobile: from });
   const senderName = user?.name || "Unknown";
@@ -304,6 +301,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
