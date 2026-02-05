@@ -4,7 +4,6 @@ const app = express();
 const http = require('http').createServer(app);
 const User = require("./models/user");
 const Message = require("./models/Message");
-const PushSubscription = require("./models/pushSubscription");
 
 
 const admin = require("firebase-admin");
@@ -24,28 +23,7 @@ const io = require('socket.io')(http, {
     }
 });
 
-const webPush = require("web-push");
-webPush.setVapidDetails(
-  "mailto:test@chatapp.com",
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
 app.use(express.json());
-app.post("/subscribe", async (req, res) => {
-
-  const { endpoint, keys, mobile } = req.body;
-  const existing = await PushSubscription.findOne({ endpoint });
-  if (existing) {
-    return res.json({ success: true, already: true });
-  }
-  await PushSubscription.create({
-    endpoint,
-    keys,
-    mobile
-  });
-  res.json({ success: true });
-});
-
 
 app.post("/api/save-fcm-token", async (req, res) => {
 
@@ -60,8 +38,6 @@ app.post("/api/save-fcm-token", async (req, res) => {
 
   res.json({ success: true });
 });
-
-
 
 
 app.set("io", io);
@@ -119,20 +95,20 @@ io.on("connection", (socket) => {
     io.to(roomId).emit("receiveMessage", data);
     const receiverUser = await User.findOne({ mobile: receiver });
       if (receiverUser?.fcmToken) {
-      const senderUser = await User.findOne({ mobile: sender });
-      const senderName = senderUser?.name || "Someone";
-      const messagePayload = {
+        const senderUser = await User.findOne({ mobile: sender });
+        const senderName = senderUser?.name || "Someone";
+        const messagePayload = {
             token: receiverUser.fcmToken,
-            notification: {
-            title: `${senderName} sent message`,
-            body: data.message,
-            },
+              notification: {
+              title: `${senderName} sent message`,
+              body: data.message,
+              },
             data: {
                 sender,
                 roomId,
                 type: "chat"
             }
-     };
+       };
     try {
       await admin.messaging().send(messagePayload);
       console.log("FCM push sent to:", receiver);
@@ -143,29 +119,7 @@ io.on("connection", (socket) => {
   } else {
     console.log("No FCM token for:", receiver);
       }
-      const subs = await PushSubscription.find({
-        mobile: receiver
-      });
-
-      subs.forEach(async sub => {
-      const senderUser = await User.findOne({ mobile: sender });
-      const senderName = senderUser?.name || "Someone";
-    try {
-      await webPush.sendNotification(
-      sub,
-      JSON.stringify({
-      title: `${senderName} send Message`,
-      body: data.message,
-      data: {
-        url: "/chat.html"
-      }
-      })
-    );
-    console.log("Push sent to:", sub.mobile);
-    } catch (err) {
-      console.error("Push error:", err.statusCode, err.body);
-    }
-    });
+    
     } catch (err) {
       console.error("Message save error:", err);
     }
@@ -277,6 +231,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
