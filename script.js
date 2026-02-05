@@ -67,6 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.success) {
         localStorage.clear();          
         localStorage.setItem("myMobile", mobile);
+        if (window.Android) {
+           Android.saveMobile(mobile);
+        }
         showAlert1(data.message);
         window.location.href = "profile.html";
       } else {
@@ -99,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
      });
 
 });
+
 
 
 
