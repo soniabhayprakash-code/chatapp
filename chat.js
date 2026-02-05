@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const roomId = [myMobile, friendMobile].sort().join("_");
 
-  let pushSubscribed = false;
   socket.on("connect", () => {
     console.log("Socket connected:", socket.id);
     socket.emit("joinRoom", { roomId });
@@ -583,6 +582,7 @@ function removeCallingUI1() {
 
 
 });
+
 
 
 
