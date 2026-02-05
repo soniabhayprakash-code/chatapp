@@ -214,60 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.disconnect();
   });
 
-//   async function askNotificationPermission() {
-//   const permission = await Notification.requestPermission();
-
-//       if (permission === "granted") {
-//         console.log("Notification allowed");
-//       } else {
-//         console.log("Notification denied");
-//       }
-//   }
-//   if (Notification.permission !== "granted") {
-//     askNotificationPermission();
-//   }
-
-//   function urlBase64ToUint8Array(base64String) {
-//   const padding = "=".repeat((4 - base64String.length % 4) % 4);
-//   const base64 = (base64String + padding)
-//     .replace(/-/g, "+")
-//     .replace(/_/g, "/");
-
-//   const rawData = window.atob(base64);
-//   const outputArray = new Uint8Array(rawData.length);
-
-//   for (let i = 0; i < rawData.length; ++i) {
-//     outputArray[i] = rawData.charCodeAt(i);
-//   }
-
-//   return outputArray;
-//   }
-
-//   async function subscribeUser() {
-
-//   const reg = await navigator.serviceWorker.ready;
-//   const existing = await reg.pushManager.getSubscription();
-//   if (existing) {
-//     console.log("ℹ Already subscribed.");
-//     return;
-//   }
-
-//   const sub = await reg.pushManager.subscribe({
-//     userVisibleOnly: true,
-//     applicationServerKey: urlBase64ToUint8Array(
-//       "BNUrv6TmdB7Z86Z3677UxvZS5QEhZ89DlT4nS91fU76XND0sKSOWCtKjcvljmGugh331XQtVBYOMhXxdVt_vkWE"
-//     )
-//   });
-
-//   await fetch("/subscribe", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({
-//       ...sub.toJSON(),
-//       mobile: myMobile
-//     })
-//   });
-// }
 
 const rtcConfig = {
   iceServers: [
@@ -641,6 +587,7 @@ function removeCallingUI1() {
 
 
 });
+
 
 
 
