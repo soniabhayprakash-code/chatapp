@@ -4,7 +4,7 @@ const app = express();
 const http = require('http').createServer(app);
 const User = require("./models/user");
 const Message = require("./models/Message");
-// const PushSubscription = require("./models/pushSubscription");
+const PushSubscription = require("./models/pushSubscription");
 
 
 const admin = require("firebase-admin");
@@ -24,27 +24,27 @@ const io = require('socket.io')(http, {
     }
 });
 
-// const webPush = require("web-push");
-// webPush.setVapidDetails(
-//   "mailto:test@chatapp.com",
-//   process.env.VAPID_PUBLIC_KEY,
-//   process.env.VAPID_PRIVATE_KEY
-// );
+const webPush = require("web-push");
+webPush.setVapidDetails(
+  "mailto:test@chatapp.com",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
 app.use(express.json());
-// app.post("/subscribe", async (req, res) => {
+app.post("/subscribe", async (req, res) => {
 
-//   const { endpoint, keys, mobile } = req.body;
-//   const existing = await PushSubscription.findOne({ endpoint });
-//   if (existing) {
-//     return res.json({ success: true, already: true });
-//   }
-//   await PushSubscription.create({
-//     endpoint,
-//     keys,
-//     mobile
-//   });
-//   res.json({ success: true });
-// });
+  const { endpoint, keys, mobile } = req.body;
+  const existing = await PushSubscription.findOne({ endpoint });
+  if (existing) {
+    return res.json({ success: true, already: true });
+  }
+  await PushSubscription.create({
+    endpoint,
+    keys,
+    mobile
+  });
+  res.json({ success: true });
+});
 
 
 app.post("/api/save-fcm-token", async (req, res) => {
@@ -104,17 +104,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", async (data) => {
-  // try {
-  //   const { roomId, sender, message } = data;
-  //   const users = roomId.split("_");
-  //   const receiver = users.find(m => m !== sender);
+  try {
+    const { roomId, sender, message } = data;
+    const users = roomId.split("_");
+    const receiver = users.find(m => m !== sender);
 
-  //   await Message.create({
-  //     roomId,
-  //     sender,
-  //     receiver,
-  //     message
-  //   });
+    await Message.create({
+      roomId,
+      sender,
+      receiver,
+      message
+    });
 
     io.to(roomId).emit("receiveMessage", data);
     const receiverUser = await User.findOne({ mobile: receiver });
@@ -143,29 +143,29 @@ io.on("connection", (socket) => {
   } else {
     console.log("No FCM token for:", receiver);
       }
-    //   const subs = await PushSubscription.find({
-    //     mobile: receiver
-    //   });
+      const subs = await PushSubscription.find({
+        mobile: receiver
+      });
 
-    //   subs.forEach(async sub => {
-    //   const senderUser = await User.findOne({ mobile: sender });
-    //   const senderName = senderUser?.name || "Someone";
-    // try {
-    //   await webPush.sendNotification(
-    //   sub,
-    //   JSON.stringify({
-    //   title: `${senderName} send Message`,
-    //   body: data.message,
-    //   data: {
-    //     url: "/chat.html"
-    //   }
-    //   })
-    // );
-    // console.log("Push sent to:", sub.mobile);
-    // } catch (err) {
-    //   console.error("Push error:", err.statusCode, err.body);
-    // }
-    // });
+      subs.forEach(async sub => {
+      const senderUser = await User.findOne({ mobile: sender });
+      const senderName = senderUser?.name || "Someone";
+    try {
+      await webPush.sendNotification(
+      sub,
+      JSON.stringify({
+      title: `${senderName} send Message`,
+      body: data.message,
+      data: {
+        url: "/chat.html"
+      }
+      })
+    );
+    console.log("Push sent to:", sub.mobile);
+    } catch (err) {
+      console.error("Push error:", err.statusCode, err.body);
+    }
+    });
     } catch (err) {
       console.error("Message save error:", err);
     }
@@ -277,6 +277,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
