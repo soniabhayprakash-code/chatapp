@@ -53,10 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.on("connect", () => {
     console.log("Socket connected:", socket.id);
     socket.emit("joinRoom", { roomId });
-    if (!pushSubscribed) {
-      subscribeUser();
-      pushSubscribed = true;
-    }
     socket.emit("register-user", myMobile);
   });
 
@@ -587,6 +583,7 @@ function removeCallingUI1() {
 
 
 });
+
 
 
 
