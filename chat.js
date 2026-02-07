@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const typing = document.getElementById("typing");
   const typingIndicator = document.getElementById("typingIndicator");
 
-  let localStream = null;
-  let peerConnection = null;
+  let localStream;
+  let peerConnection;
   let currentCallUser = null;
   let callState = "IDLE";
   let pendingIceCandidates = [];
@@ -275,7 +275,7 @@ callBtn.addEventListener("click", async () => {
 
 socket.on("call-offer", async ({ offer, from }) => {
 
-  if (callState !== "IN_CALL") return;
+  // if (callState !== "IN_CALL") return;
   currentCallUser = from;
 
   peerConnection.onicecandidate = e => {
@@ -442,25 +442,45 @@ pendingIceCandidates = [];
 });
 
 
-socket.on("call-ice", async ({ candidate }) => {
+// socket.on("call-ice", async ({ candidate }) => {
+
+//   if (!peerConnection) return;
+
+//   if (
+//     peerConnection.signalingState === "closed" ||
+//     !peerConnection.remoteDescription
+//   ) {
+//     console.warn("⚠ ICE queued — peer not ready");
+//     pendingIceCandidates.push(candidate);
+//     return;
+//   }
+
+//   try {
+//     await peerConnection.addIceCandidate(candidate);
+//   } catch (err) {
+//     console.error("ICE add error:", err);
+//   }
+// });
+
+  socket.on("call-ice", async ({ candidate }) => {
 
   if (!peerConnection) return;
 
-  if (
-    peerConnection.signalingState === "closed" ||
-    !peerConnection.remoteDescription
-  ) {
+  if (!peerConnection.remoteDescription) {
     console.warn("⚠ ICE queued — peer not ready");
     pendingIceCandidates.push(candidate);
     return;
   }
 
   try {
-    await peerConnection.addIceCandidate(candidate);
+    await peerConnection.addIceCandidate(
+      new RTCIceCandidate(candidate)
+    );
   } catch (err) {
     console.error("ICE add error:", err);
   }
 });
+
 
 endBtn.addEventListener("click", () => {
   peerConnection?.close();
@@ -582,6 +602,7 @@ function removeCallingUI1() {
 
 
 });
+
 
 
 
