@@ -464,6 +464,7 @@ socket.on("call-ice", async ({ candidate }) => {
 
 
 endBtn.addEventListener("click", () => {
+  removeCallingUI2();
   peerConnection?.close();
   localStream?.getTracks().forEach(t => t.stop());
 
@@ -488,7 +489,8 @@ socket.on("call-end", () => {
   stopOutgoingRingtone();
 
   removeCallingUI();
-  removeCallingUI1()
+  removeCallingUI1();
+  removeCallingUI2();
 
   if (peerConnection) {
     peerConnection.ontrack = null;
@@ -528,6 +530,7 @@ function showIncomingCallUI(name) {
     document.getElementById("acceptCallBtn").onclick = async () => {
       
       stopIncomingRingtone();
+      showCallingrunUI() 
       
       callState = "IN_CALL";
       setCallIcon("IN_CALL");
@@ -569,12 +572,14 @@ function showCallingUI() {
     
     socket.emit("call-end", { to: currentCallUser });
     removeCallingUI();
+    removeCallingUI2();
     setCallIcon("IDLE"); 
   };
 }
 
 function removeCallingUI() {
   document.getElementById("callingBox")?.remove();
+  showCallingrunUI();
 }
 
 function removeCallingUI1() {
@@ -582,7 +587,39 @@ function removeCallingUI1() {
 }
 
 
+  function showCallingrunUI() {
+
+  let box = document.getElementById("callrunBox");
+
+  if (box) return;
+
+  box = document.createElement("div");
+  box.id = "callrunBox";
+
+  box.innerHTML = `
+      <p>📞 00:00:00 </p>
+      <button id="speakerToggleBtn">🔊</button>
+  `;
+
+  document.body.appendChild(box);
+
+  document.getElementById("speakerToggleBtn").onclick = () => {
+    const speakerBtn = document.getElementById("speakerToggleBtn");
+    if (speakerBtn.textContent === "🔊") {
+      speakerBtn.textContent = "🔇";
+    } else {
+      speakerBtn.textContent = "🔊";
+    }
+  };
+
+}
+
+  function removeCallingUI2() {
+  document.getElementById("callrunBox")?.remove();
+}
+
 });
+
 
 
 
