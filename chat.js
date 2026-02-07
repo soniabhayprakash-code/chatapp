@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentCallUser = null;
   let callState = "IDLE";
   let pendingIceCandidates = [];
+  let speakerOn = true;
 
   let typingTimeout;
   let isTyping = false;
@@ -432,6 +433,11 @@ socket.on("call-accepted", async () => {
 
 pendingIceCandidates = [];
 
+  if (window.AndroidAudio) {
+     window.AndroidAudio.setSpeaker(true);
+  }
+  speakerOn = true;
+
 
   socket.emit("call-offer", {
     to: currentCallUser,
@@ -499,6 +505,13 @@ socket.on("call-end", () => {
     peerConnection = null;
   }
 
+
+if (window.AndroidAudio) {
+  window.AndroidAudio.setSpeaker(false);
+}
+speakerOn = false;
+
+
   localStream?.getTracks().forEach(t => t.stop());
   localStream = null;
 
@@ -538,6 +551,12 @@ function showIncomingCallUI(name) {
       socket.emit("accept-call", { to: currentCallUser });
       await getAudioStream();
       await createPeer();
+     
+     if (window.AndroidAudio) {
+        window.AndroidAudio.setSpeaker(true);
+     }
+     speakerOn = true;
+
     };
 
     document.getElementById("rejectCallBtn").onclick = () => {
@@ -618,7 +637,24 @@ function removeCallingUI1() {
   document.getElementById("callrunBox")?.remove();
 }
 
+  const speakerBtn = document.getElementById("speakerToggleBtn");
+
+speakerBtn.addEventListener("click", () => {
+
+  speakerOn = !speakerOn;
+
+  if (window.AndroidAudio) {
+    window.AndroidAudio.setSpeaker(speakerOn);
+  }
+
+  speakerBtn.innerText = speakerOn
+    ? "🔊 Speaker"
+    : "🎧 Earpiece";
 });
+
+
+});
+
 
 
 
