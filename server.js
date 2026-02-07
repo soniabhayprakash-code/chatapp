@@ -124,7 +124,7 @@ io.on("connection", (socket) => {
       console.error("Message save error:", err);
     }
 
-  // });
+  });
 
   socket.on("call-user", async ({ to, from }) => {
 
@@ -215,7 +215,6 @@ socket.on("call-end", ({ to }) => {
   }
 });
 
-    });
 
   socket.on("disconnect", () => {
     for (let [mobile, id] of onlineUsers.entries()) {
@@ -233,6 +232,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
