@@ -183,6 +183,44 @@ html,body{
     top: 50%;
     transform: translateY(-50%);
 }
+#callrunBox{
+  height: 8%;
+  width: 80%;
+  position: fixed;
+  display: flex;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 22px 26px;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);  
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  font-size: 12px;
+}
+#callrunBox p{
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#speakerToggleBtn{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 20px;
+}
 #chat-box {
     flex: 1; 
     width: 100%;   
@@ -342,6 +380,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
