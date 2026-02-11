@@ -638,14 +638,29 @@ function removeCallingUI1() {
     }
   };
 
-    document.getElementById("micToggleBtn").onclick = () => {
-    const micBtn = document.getElementById("micToggleBtn");
-    if (micBtn.textContent === "🎤") {
-      micBtn.textContent = "🔇";
-    } else {
-      micBtn.textContent = "🎤";
-    }
-  };
+    let micMuted = false;
+
+document.getElementById("micToggleBtn").onclick = () => {
+  const micBtn = document.getElementById("micToggleBtn");
+
+  if (!localStream) return;
+
+  const audioTrack = localStream.getAudioTracks()[0];
+
+  if (!audioTrack) return;
+
+  if (!micMuted) {
+    audioTrack.enabled = false;
+    micBtn.textContent = "🔇";
+    micMuted = true;
+    console.log("🎙 Mic muted");
+  } else {
+    audioTrack.enabled = true;
+    micBtn.textContent = "🎤";
+    micMuted = false;
+    console.log("🎙 Mic unmuted");
+  }
+};
 
 }
 
@@ -712,6 +727,7 @@ speakerBtn.addEventListener("click", () => {
 
 
 });
+
 
 
 
