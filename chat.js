@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let pendingIceCandidates = [];
   let speakerOn = true;
 
+  let callTimerInterval = null;
+  let callStartTime = null;
+
   let typingTimeout;
   let isTyping = false;
 
@@ -493,6 +496,7 @@ socket.on("call-end", () => {
 
   stopIncomingRingtone();
   stopOutgoingRingtone();
+  stopCallTimer();
 
   removeCallingUI();
   removeCallingUI1();
@@ -622,6 +626,8 @@ function removeCallingUI1() {
 
   document.body.appendChild(box);
 
+    startCallTimer();
+
   document.getElementById("speakerToggleBtn").onclick = () => {
     const speakerBtn = document.getElementById("speakerToggleBtn");
     if (speakerBtn.textContent === "🔊") {
@@ -636,6 +642,46 @@ function removeCallingUI1() {
   function removeCallingUI2() {
   document.getElementById("callrunBox")?.remove();
 }
+
+  function startCallTimer() {
+
+  callStartTime = Date.now();
+
+  callTimerInterval = setInterval(() => {
+
+    const elapsed = Date.now() - callStartTime;
+
+    const totalSeconds = Math.floor(elapsed / 1000);
+
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+    const timeText = `${hours}:${minutes}:${seconds}`;
+
+    const timeEl = document.querySelector("#callrunBox p");
+
+    if (timeEl) {
+      timeEl.innerText = `📞 ${timeText}`;
+    }
+
+  }, 1000);
+}
+
+
+function stopCallTimer() {
+
+  if (callTimerInterval) {
+    clearInterval(callTimerInterval);
+    callTimerInterval = null;
+  }
+
+  callStartTime = null;
+}
+
+
+
+  
 
   const speakerBtn = document.getElementById("speakerToggleBtn");
 
@@ -652,8 +698,11 @@ speakerBtn.addEventListener("click", () => {
     : "🎧 Earpiece";
 });
 
+  
+
 
 });
+
 
 
 
