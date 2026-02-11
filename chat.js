@@ -621,6 +621,7 @@ function removeCallingUI1() {
 
   box.innerHTML = `
       <p>📞 00:00:00 </p>
+       <button id="micToggleBtn">🎤</button>
       <button id="speakerToggleBtn">🔊</button>
   `;
 
@@ -631,9 +632,18 @@ function removeCallingUI1() {
   document.getElementById("speakerToggleBtn").onclick = () => {
     const speakerBtn = document.getElementById("speakerToggleBtn");
     if (speakerBtn.textContent === "🔊") {
-      speakerBtn.textContent = "🔇";
+      speakerBtn.textContent = "🔉";
     } else {
       speakerBtn.textContent = "🔊";
+    }
+  };
+
+    document.getElementById("micToggleBtn").onclick = () => {
+    const micBtn = document.getElementById("micToggleBtn");
+    if (micBtn.textContent === "🎤") {
+      micBtn.textContent = "🔇";
+    } else {
+      micBtn.textContent = "🎤";
     }
   };
 
@@ -702,6 +712,7 @@ speakerBtn.addEventListener("click", () => {
 
 
 });
+
 
 
 
