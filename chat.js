@@ -636,9 +636,8 @@ function removeCallingUI1() {
       window.AndroidAudio.setSpeaker(false);
     }
 
-    speakerBtn.textContent = "🎧";
+    speakerBtn.textContent = "🔉";
     speakerOn = false;
-    console.log("🔈 Ear speaker ON");
 
   } else {
     if (window.AndroidAudio) {
@@ -647,7 +646,6 @@ function removeCallingUI1() {
 
     speakerBtn.textContent = "🔊";
     speakerOn = true;
-    console.log("🔊 Loud speaker ON");
   }
 
 };
@@ -667,12 +665,10 @@ document.getElementById("micToggleBtn").onclick = () => {
     audioTrack.enabled = false;
     micBtn.textContent = "🔇";
     micMuted = true;
-    console.log("🎙 Mic muted");
   } else {
     audioTrack.enabled = true;
     micBtn.textContent = "🎤";
     micMuted = false;
-    console.log("🎙 Mic unmuted");
   }
 };
 
@@ -741,6 +737,7 @@ function stopCallTimer() {
 
 
 });
+
 
 
 
