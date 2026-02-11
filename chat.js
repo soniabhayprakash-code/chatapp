@@ -509,13 +509,6 @@ socket.on("call-end", () => {
     peerConnection = null;
   }
 
-
-if (window.AndroidAudio) {
-  window.AndroidAudio.setSpeaker(false);
-}
-speakerOn = false;
-
-
   localStream?.getTracks().forEach(t => t.stop());
   localStream = null;
 
@@ -524,6 +517,11 @@ speakerOn = false;
   console.log("Call Cleaned");
 
   showAlert("Call Ended");
+  speakerOn = true;
+
+  if (window.AndroidAudio) {
+    window.AndroidAudio.setSpeaker(true);
+  }
 });
 
 
@@ -630,13 +628,29 @@ function removeCallingUI1() {
     startCallTimer();
 
   document.getElementById("speakerToggleBtn").onclick = () => {
-    const speakerBtn = document.getElementById("speakerToggleBtn");
-    if (speakerBtn.textContent === "🔊") {
-      speakerBtn.textContent = "🔉";
-    } else {
-      speakerBtn.textContent = "🔊";
+
+  const speakerBtn = document.getElementById("speakerToggleBtn");
+
+  if (speakerOn) {
+    if (window.AndroidAudio) {
+      window.AndroidAudio.setSpeaker(false);
     }
-  };
+
+    speakerBtn.textContent = "🎧";
+    speakerOn = false;
+    console.log("🔈 Ear speaker ON");
+
+  } else {
+    if (window.AndroidAudio) {
+      window.AndroidAudio.setSpeaker(true);
+    }
+
+    speakerBtn.textContent = "🔊";
+    speakerOn = true;
+    console.log("🔊 Loud speaker ON");
+  }
+
+};
 
     let micMuted = false;
 
@@ -708,25 +722,26 @@ function stopCallTimer() {
 
   
 
-  const speakerBtn = document.getElementById("speakerToggleBtn");
+//   const speakerBtn = document.getElementById("speakerToggleBtn");
 
-speakerBtn.addEventListener("click", () => {
+// speakerBtn.addEventListener("click", () => {
 
-  speakerOn = !speakerOn;
+//   speakerOn = !speakerOn;
 
-  if (window.AndroidAudio) {
-    window.AndroidAudio.setSpeaker(speakerOn);
-  }
+//   if (window.AndroidAudio) {
+//     window.AndroidAudio.setSpeaker(speakerOn);
+//   }
 
-  speakerBtn.innerText = speakerOn
-    ? "🔊 Speaker"
-    : "🎧 Earpiece";
-});
+//   speakerBtn.innerText = speakerOn
+//     ? "🔊 Speaker"
+//     : "🎧 Earpiece";
+// });
 
   
 
 
 });
+
 
 
 
