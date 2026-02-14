@@ -253,6 +253,19 @@ html,body{
     background-color: white;
     -webkit-overflow-scrolling: touch;
 }
+
+#galleryBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+#galleryBtn:active {
+  transform: scale(0.9);
+}
+
+
 #messages {
     list-style: none;
     width: 100%;
@@ -394,6 +407,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
