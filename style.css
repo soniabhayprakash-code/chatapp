@@ -260,6 +260,8 @@ html,body{
   font-size: 15px;
   margin-right: 5px;
   border-radius: 50px;
+  height: 25px;
+  width: 25px;
 }
 
 #galleryBtn:active {
@@ -408,6 +410,7 @@ li.received .bubble {
 .hidden {
   display: none;
 }
+
 
 
 
