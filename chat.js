@@ -714,6 +714,14 @@ function stopCallTimer() {
   callStartTime = null;
 }
 
+  const galleryBtn = document.getElementById("galleryBtn");
+const fileInput = document.getElementById("fileInput");
+
+galleryBtn.onclick = () => {
+
+  fileInput.click(); 
+
+};
 
 
   
@@ -737,6 +745,7 @@ function stopCallTimer() {
 
 
 });
+
 
 
 
