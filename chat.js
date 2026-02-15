@@ -76,17 +76,82 @@ document.addEventListener("DOMContentLoaded", () => {
   
   socket.on("loadMessages", (messages) => {
 
-    messages.forEach(msg => {
+  messages.forEach(msg => {
 
-      if (msg.sender === myMobile) {
-        addMessage(msg.message, "sent");
-      } else {
-        addMessage(msg.message, "received");
-      }
+    if (msg.type === "text") {
 
-   });
+      addMessage(
+        msg.message,
+        msg.sender === myMobile ? "sent" : "received",
+        msg.createdAt
+      );
+    }
+    else if (msg.type === "image") {
+      
+    const li = document.createElement("li");
+    li.classList.add(
+      msg.sender === myMobile ? "sent" : "received"
+    );
 
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const img = document.createElement("img");
+
+    img.src = msg.message;
+    img.style.maxWidth = "200px";
+    img.style.borderRadius = "10px";
+
+    const timestamp = document.createElement("span");
+    timestamp.className = "timestamp";
+    timestamp.textContent = new Date(msg.createdAt)
+    .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    bubble.appendChild(img);
+    bubble.appendChild(timestamp);
+
+    li.appendChild(bubble);
+
+    messagesList.appendChild(li);
+
+   }
+    else if (msg.type === "video") {
+
+    const li = document.createElement("li");
+
+    li.classList.add(
+      msg.sender === myMobile ? "sent" : "received"
+    );
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const video = document.createElement("video");
+
+    video.src = msg.message;
+    video.controls = true;
+    video.style.maxWidth = "200px";
+    video.style.borderRadius = "10px";
+
+    const timestamp = document.createElement("span");
+    timestamp.className = "timestamp";
+    timestamp.textContent = new Date(msg.createdAt)
+    .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    bubble.appendChild(video);
+    bubble.appendChild(timestamp);
+
+    li.appendChild(bubble);
+
+    messagesList.appendChild(li);
+      
+   }
+    
   });
+    
+  scrollToBottom();
+    
+});
 
   if ('virtualKeyboard' in navigator) {
         navigator.virtualKeyboard.overlaysContent = true;
@@ -105,27 +170,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function addMessage(text, type) {
-    const li = document.createElement("li");
-    li.classList.add(type);
+  function addMessage(text, type, time = null) {
 
-    const messageBubble = document.createElement("div");
-    messageBubble.className = "bubble";
+  const li = document.createElement("li");
+  li.classList.add(type);
 
-    const msgText = document.createElement("span");
-    msgText.className = "msg-text";
-    msgText.textContent = text;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
 
-    const timestamp = document.createElement("span");
-    timestamp.className = "timestamp";
-    timestamp.textContent = getTime();
+  const msgText = document.createElement("span");
+  msgText.className = "msg-text";
+  msgText.textContent = text;
 
-    messageBubble.appendChild(msgText);
-    messageBubble.appendChild(timestamp);
-    li.appendChild(messageBubble);
+  const timestamp = document.createElement("span");
+  timestamp.className = "timestamp";
 
-    messagesList.appendChild(li);
-    scrollToBottom();
+  timestamp.textContent =
+    time
+    ? new Date(time).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+    : getTime();
+
+  bubble.appendChild(msgText);
+  bubble.appendChild(timestamp);
+
+  li.appendChild(bubble);
+
+  messagesList.appendChild(li);
+  scrollToBottom();
+
   }
 
   function sendMessage() {
@@ -137,7 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("sendMessage", {
       roomId,
       message: text,
-      sender: myMobile
+      sender: myMobile,
+      type: "text"
     });
 
     input.value = "";
@@ -145,11 +221,86 @@ document.addEventListener("DOMContentLoaded", () => {
     input.style.overflowY = "hidden";
   }
   socket.on("receiveMessage", (data) => {
-    if (data.roomId !== roomId) return;
-    if (data.sender === myMobile) return;
 
-    addMessage(data.message, "received");
-  });
+  if (data.roomId !== roomId) return;
+
+  if (data.sender === myMobile) return;
+
+  const li = document.createElement("li");
+
+  li.classList.add("received");
+
+  if (data.type === "text") {
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  const msgText = document.createElement("span");
+  msgText.className = "msg-text";
+  msgText.textContent = data.message;
+
+  const timestamp = document.createElement("span");
+  timestamp.className = "timestamp";
+  timestamp.textContent = getTime();
+
+  bubble.appendChild(msgText);
+  bubble.appendChild(timestamp);
+
+  li.appendChild(bubble);
+
+}
+
+
+  else if (data.type === "image") {
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  const img = document.createElement("img");
+  img.src = data.message;
+  img.style.maxWidth = "200px";
+  img.style.borderRadius = "10px";
+
+  const timestamp = document.createElement("span");
+  timestamp.className = "timestamp";
+  timestamp.textContent = getTime();
+
+  bubble.appendChild(img);
+  bubble.appendChild(timestamp);
+
+  li.appendChild(bubble);
+
+}
+
+
+  else if (data.type === "video") {
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  const video = document.createElement("video");
+  video.src = data.message;
+  video.controls = true;
+  video.style.maxWidth = "200px";
+  video.style.borderRadius = "10px";
+
+  const timestamp = document.createElement("span");
+  timestamp.className = "timestamp";
+  timestamp.textContent = getTime();
+
+  bubble.appendChild(video);
+  bubble.appendChild(timestamp);
+
+  li.appendChild(bubble);
+
+}
+
+
+  messagesList.appendChild(li);
+
+  scrollToBottom();
+
+});
   sendBtn.addEventListener("click", sendMessage);
   sendBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
@@ -714,7 +865,7 @@ function stopCallTimer() {
   callStartTime = null;
 }
 
-  const galleryBtn = document.getElementById("galleryBtn");
+const galleryBtn = document.getElementById("galleryBtn");
 const fileInput = document.getElementById("fileInput");
 
 galleryBtn.onclick = () => {
@@ -722,6 +873,117 @@ galleryBtn.onclick = () => {
   fileInput.click(); 
 
 };
+
+  let selectedFile = null;
+
+fileInput.onchange = () => {
+
+  selectedFile = fileInput.files[0];
+
+  if (selectedFile) {
+    console.log("Selected:", selectedFile.name);
+  }
+
+};
+
+sendBtn.onclick = async () => {
+
+  if (selectedFile) {
+
+    const formData = new FormData();
+
+    formData.append("file", selectedFile);
+
+    const res = await fetch("/upload", {
+
+      method: "POST",
+      body: formData
+
+    });
+
+    const data = await res.json();
+
+  if (data.success) {
+
+  const fileType =
+    selectedFile.type.startsWith("image")
+      ? "image"
+      : "video";
+
+  if (fileType === "image") {
+
+    const li = document.createElement("li");
+    li.classList.add("sent");
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const img = document.createElement("img");
+    img.src = data.url;
+    img.style.maxWidth = "200px";
+    img.style.borderRadius = "10px";
+
+    const timestamp = document.createElement("span");
+    timestamp.className = "timestamp";
+    timestamp.textContent = getTime();
+
+    bubble.appendChild(img);
+    bubble.appendChild(timestamp);
+
+    li.appendChild(bubble);
+    messagesList.appendChild(li);
+
+
+  }
+  else {
+
+    const li = document.createElement("li");
+    li.classList.add("sent");
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const video = document.createElement("video");
+    video.src = data.url;
+    video.controls = true;
+    video.style.maxWidth = "200px";
+    video.style.borderRadius = "10px";
+
+    const timestamp = document.createElement("span");
+    timestamp.className = "timestamp";
+    timestamp.textContent = getTime();
+
+    bubble.appendChild(video);
+    bubble.appendChild(timestamp);
+
+    li.appendChild(bubble);
+    messagesList.appendChild(li);
+
+
+  }
+
+  scrollToBottom();
+
+  socket.emit("sendMessage", {
+
+    roomId,
+    sender: myMobile,
+    message: data.url,
+    type: fileType
+
+  });
+
+}
+
+
+    selectedFile = null;
+    fileInput.value = "";
+
+    return;
+  }
+
+};
+
 
 
   
@@ -745,6 +1007,7 @@ galleryBtn.onclick = () => {
 
 
 });
+
 
 
 
