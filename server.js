@@ -230,11 +230,59 @@ socket.on("call-end", ({ to }) => {
     });
   });
 
+
+app.use("/uploads", express.static("uploads"));
+
+  const storage = multer.diskStorage({
+
+  destination: (req, file, cb) => {
+
+    cb(null, "uploads/");
+
+  },
+
+  filename: (req, file, cb) => {
+
+    const uniqueName =
+      Date.now() + "-" + file.originalname;
+
+    cb(null, uniqueName);
+
+  }
+
+});
+
+const upload = multer({ storage });
+
+app.post("/upload", upload.single("file"), (req, res) => {
+
+  if (!req.file) {
+
+    return res.status(400).json({
+      success: false
+    });
+
+  }
+
+  const fileUrl =
+    `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+
+  res.json({
+
+    success: true,
+    url: fileUrl
+
+  });
+
+});
+
+
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
