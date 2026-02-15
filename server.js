@@ -5,6 +5,9 @@ const http = require('http').createServer(app);
 const User = require("./models/user");
 const Message = require("./models/Message");
 
+const multer = require("multer");
+const path = require("path");
+
 
 const admin = require("firebase-admin");
 const serviceAccount = require("./firebase-admin.json");
@@ -282,6 +285,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
