@@ -89,7 +89,10 @@ io.on("connection", (socket) => {
       roomId,
       sender,
       receiver,
-      message
+      message,
+      type: data.type,
+      createdAt: new Date()
+      
     });
 
     io.to(roomId).emit("receiveMessage", data);
@@ -232,6 +235,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
