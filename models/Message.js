@@ -17,6 +17,10 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  type: {
+    type: String,
+    default: "text"
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -24,3 +28,4 @@ const messageSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Message", messageSchema);
+
