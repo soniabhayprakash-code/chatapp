@@ -876,14 +876,25 @@ galleryBtn.onclick = () => {
 
   let selectedFile = null;
 
-fileInput.onchange = () => {
+// fileInput.onchange = () => {
 
-  selectedFile = fileInput.files[0];
+//   selectedFile = fileInput.files[0];
 
-  if (selectedFile) {
-    console.log("Selected:", selectedFile.name);
-  }
+//   if (selectedFile) {
+//     console.log("Selected:", selectedFile.name);
+//   }
 
+// };
+
+  fileInput.onchange = () => {
+
+  const files = fileInput.files;
+
+  if (!files || files.length === 0) return;
+
+  selectedFile = files[0];
+
+  console.log("Selected:", selectedFile);
 };
 
 sendBtn.onclick = async () => {
@@ -1007,6 +1018,7 @@ sendBtn.onclick = async () => {
 
 
 });
+
 
 
 
