@@ -301,11 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
   scrollToBottom();
 
 });
-  // sendBtn.addEventListener("click", sendMessage);
-  // sendBtn.addEventListener("touchstart", (e) => {
-  //     e.preventDefault();
-  //     sendMessage();
-  // });
 
    input.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -876,16 +871,6 @@ galleryBtn.onclick = () => {
 
   let selectedFile = null;
 
-// fileInput.onchange = () => {
-
-//   selectedFile = fileInput.files[0];
-
-//   if (selectedFile) {
-//     console.log("Selected:", selectedFile.name);
-//   }
-
-// };
-
   fileInput.onchange = () => {
 
   const files = fileInput.files;
@@ -1003,28 +988,8 @@ sendBtn.addEventListener("click", async (e) => {
   });
 
 
-
-  
-
-//   const speakerBtn = document.getElementById("speakerToggleBtn");
-
-// speakerBtn.addEventListener("click", () => {
-
-//   speakerOn = !speakerOn;
-
-//   if (window.AndroidAudio) {
-//     window.AndroidAudio.setSpeaker(speakerOn);
-//   }
-
-//   speakerBtn.innerText = speakerOn
-//     ? "🔊 Speaker"
-//     : "🎧 Earpiece";
-// });
-
-  
-
-
 });
+
 
 
 
