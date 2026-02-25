@@ -301,11 +301,11 @@ document.addEventListener("DOMContentLoaded", () => {
   scrollToBottom();
 
 });
-  sendBtn.addEventListener("click", sendMessage);
-  sendBtn.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      sendMessage();
-  });
+  // sendBtn.addEventListener("click", sendMessage);
+  // sendBtn.addEventListener("touchstart", (e) => {
+  //     e.preventDefault();
+  //     sendMessage();
+  // });
 
    input.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -897,7 +897,8 @@ galleryBtn.onclick = () => {
   console.log("Selected:", selectedFile);
 };
 
-sendBtn.onclick = async () => {
+sendBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
 
   if (selectedFile) {
 
@@ -993,7 +994,13 @@ sendBtn.onclick = async () => {
     return;
   }
 
-};
+   sendMessage();
+
+});
+  sendBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      sendMessage();
+  });
 
 
 
@@ -1018,6 +1025,7 @@ sendBtn.onclick = async () => {
 
 
 });
+
 
 
 
