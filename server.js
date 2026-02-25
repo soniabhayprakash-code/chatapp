@@ -268,7 +268,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
   }
 
   const fileUrl =
-    `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    `https://chatapp-1-suv6.onrender.com/uploads/${req.file.filename}`;
 
   res.json({
 
@@ -285,6 +285,7 @@ http.listen(PORT, () => {
     console.log('--Started--');
     console.log("Server running on port", PORT);
 });
+
 
 
 
