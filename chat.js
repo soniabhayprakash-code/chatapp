@@ -906,7 +906,7 @@ sendBtn.addEventListener("click", async (e) => {
 
     formData.append("file", selectedFile);
 
-    const res = await fetch("/upload", {
+    const res = await fetch("https://chatapp-1-suv6.onrender.com/upload", {
 
       method: "POST",
       body: formData
@@ -1025,6 +1025,7 @@ sendBtn.addEventListener("click", async (e) => {
 
 
 });
+
 
 
 
